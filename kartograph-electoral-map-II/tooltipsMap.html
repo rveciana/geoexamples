@@ -1,0 +1,35 @@
+<html>
+    <head>
+        <script src="jquery-1.8.3.min.js"></script>
+        <script src="raphael-min.js"></script>
+        <script src="kartograph.min.js"></script>
+        <script src="jquery.qtip.js"></script>
+        <link rel="stylesheet" type="text/css" href="jquery.qtip.css"/>
+ <script language="JavaScript"> 
+function loadMap(){
+var map = Kartograph.map('#map', 600, 0);
+
+map.loadMap('elections.svg', function() {
+    map.loadCSS('elections.css', function() {
+    map.addLayer('background');
+    map.addLayer('world');
+    map.addLayer('depth');
+    map.addLayer('trees');
+    map.addLayer('crops');
+    map.addLayer('municipalities');
+
+    $.fn.qtip.defaults.style.classes = 'qtip-light';
+
+    map.getLayer('municipalities').tooltips(function(data) {
+        return [data.name, 'CiU: <b>' + data.ciu + '</b><br/>PSC-PSOE: <b>'+ data.psc + '</b><br/>ERC: <b>' + data.erc+'</b><br/>PP: <b>'+data.pp+'</b><br/>ICV-EUA: <b>'+data.icv+'</b><br/>C\'s: <b>'+data.cs+'</b>'];
+    });
+    });
+}, { padding: -30 })
+}
+</script>
+    </head>
+    <body onLoad="loadMap()">
+
+        <div id="map"></div>
+    </body>
+</html>

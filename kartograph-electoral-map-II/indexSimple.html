@@ -1,0 +1,47 @@
+<html>
+    <head>
+        <script src="jquery-1.8.3.min.js"></script>
+        <script src="raphael-min.js"></script>
+        <script src="kartograph.min.js"></script>
+ <script language="JavaScript"> 
+function loadMap(){
+console.info("loading...");
+var map = Kartograph.map('#map', 600, 0);
+
+ 
+map.loadMap('elections.svg', function() {
+  map.loadCSS('elections.css', function() {
+    map.addLayer('background');
+    map.addLayer('world');
+    map.addLayer('depth');
+    map.addLayer('trees');
+    map.addLayer('crops');
+    map.addLayer('municipalities');
+    
+    map.getLayer('municipalities').style('fill', function(data) {
+        var bgColor;
+        if (data.winner == "CiU") {
+            bgColor = '#99edff';
+        } else if (data.winner == "PSC-PSOE") {
+            bgColor = '#ff9999';
+        } else if (data.winner == "ERC") {
+            bgColor = '#EDE61A';
+        }
+        return bgColor;
+    });
+    map.getLayer('municipalities')
+    .on('click', function(data, path, e) {
+        // do something nice
+        console.log(data.winner);
+        //path.attr('fill', 'red');
+    });
+    });
+}, { padding: -30 })
+}
+</script>
+    </head>
+    <body onLoad="loadMap()">
+
+        <div id="map"></div>
+    </body>
+</html>

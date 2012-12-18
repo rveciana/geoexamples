@@ -1,0 +1,88 @@
+<html>
+    <head>
+        <script src="jquery-1.8.3.min.js"></script>
+        <script src="raphael-min.js"></script>
+        <script src="kartograph.min.js"></script>
+        <script src="jquery.qtip.js"></script>
+        <link rel="stylesheet" type="text/css" href="jquery.qtip.css"/>
+ <script language="JavaScript"> 
+var map;
+function loadMap(){
+
+map = Kartograph.map('#map', 600, 0);
+
+ 
+map.loadMap('elections.svg', function() {
+  map.loadCSS('elections.css', function() {
+    map.addLayer('background');
+    map.addLayer('world');
+    map.addLayer('depth');
+    map.addLayer('trees');
+    map.addLayer('crops');
+    map.addLayer('municipalities');
+
+    setColors(1);
+    $.fn.qtip.defaults.style.classes = 'qtip-light';
+
+    map.getLayer('municipalities').tooltips(function(data) {
+        return [data.name, 'CiU: <b>' + data.ciu + '</b><br/>PSC-PSOE: <b>'+ data.psc + '</b><br/>ERC: <b>' + data.erc+'</b><br/>PP: <b>'+data.pp+'</b><br/>ICV-EUA: <b>'+data.icv+'</b><br/>C\'s: <b>'+data.cs+'</b>'];
+    });
+    
+    
+
+    });
+}, { padding: -30 })
+
+}
+
+function changePos(sel){
+ var value = sel.options[sel.selectedIndex].value;
+ setColors(value);
+}
+
+function setColors(value){
+ map.getLayer('municipalities').style('fill', function(data) {
+
+    var positions = new Array();
+    positions[0] = parseInt(data.ciu);
+    positions[1] = parseInt(data.psc);
+    positions[2] = parseInt(data.erc);
+    positions[3] = parseInt(data.pp);
+    positions[4] = parseInt(data.icv);
+    positions[5] = parseInt(data.cs);
+
+    positions.sort(function(a,b) { return b-a; });
+
+    var bgColor;
+    if (positions[value-1] == parseInt(data.ciu)){
+        bgColor = "#99edff";
+    } else if (positions[value-1] == parseInt(data.psc)){
+        bgColor = "#ff9999";
+    } else if (positions[value-1] == parseInt(data.erc)){
+        bgColor = "#EDE61A";
+    } else if (positions[value-1] == parseInt(data.pp)){
+        bgColor = "#005aff";
+    } else if (positions[value-1] == parseInt(data.icv)){
+        bgColor = "#74ff74";
+    } else if (positions[value-1] == parseInt(data.cs)){
+        bgColor = "#ff7b00";
+    }
+    
+    
+    return bgColor;
+ });
+}
+</script>
+    </head>
+    <body onLoad="loadMap()">
+        <select onChange="changePos(this)">
+            <option value="1">1st position</option>
+            <option value="2">2nd position</option>
+            <option value="3">3rd position</option>
+            <option value="4">4th position</option>
+            <option value="5">5th position</option>
+        </select>
+        <div id="map"></div>
+        <img src="legend.png" width="100px" />
+    </body>
+</html>

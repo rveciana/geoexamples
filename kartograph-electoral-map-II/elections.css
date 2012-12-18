@@ -1,0 +1,29 @@
+#map svg path.background {
+ fill: #e8f9fb;
+ stroke: none;
+}
+#map svg path.world {
+ fill: #f5f3f2;
+ stroke: none;
+}
+#map svg path.graticule {
+ stroke-width: 0.3px;
+}
+#map svg path.depth {
+ stroke: #223366;
+ stroke-width: 0.5px;
+ stroke-opacity: 0.4;
+}
+#map svg path.trees {
+  fill: #d2f8c0;
+  stroke: none;
+}
+#map svg path.crops {
+  fill: #fcf8d8;
+  stroke: none;
+}
+#map svg path.municipalities {
+ stroke-width: 0.5px;
+ stroke-opacity: 0.4;
+}
+
