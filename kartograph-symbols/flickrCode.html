@@ -1,0 +1,111 @@
+<?xml version='1.0' encoding='utf-8' ?>
+<!DOCTYPE html PUBLIC "-W3CDTD XHTML 1.0 StrictEN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<title>Using Icon symbols with the Flickr API -- source code</title>
+
+<script type="text/javascript" src="http://agorbatchev.typepad.com/pub/sh/3_0_83/scripts/shCore.js"></script>
+<script type="text/javascript" src="http://agorbatchev.typepad.com/pub/sh/3_0_83/scripts/shBrushXml.js"></script>
+<link type="text/css" rel="stylesheet" href="http://agorbatchev.typepad.com/pub/sh/3_0_83/styles/shCore.css"/>
+<link type="text/css" rel="Stylesheet" href="http://agorbatchev.typepad.com/pub/sh/3_0_83/styles/shThemeDefault.css"/>
+<script type="text/javascript">SyntaxHighlighter.all();</script>
+</head>
+
+<body>
+
+<h3>Using Icon symbols with the Flickr API -- source code</h3>
+
+<p>
+This is the source code for the <a href="flickr.html">Using Icon symbols with the Flickr API</a> example
+</p>
+
+<script type="syntaxhighlighter" class="brush: html"><![CDATA[
+<!DOCTYPE html>
+<html>
+    <head>
+        <script src="lib/jquery.min.js">&lt;/script>
+        <script src="lib/raphael-min.js">&lt;/script>
+        <script src="lib/kartograph.min.js">&lt;/script>
+        <script src="lib/chroma.js">&lt;/script>
+        <script src="lib/proj4js-compressed.js">&lt;/script>
+        <script src="lib/jquery.qtip.js">&lt;/script>
+<link rel="stylesheet" type="text/css" href="lib/jquery.qtip.css"/>
+<style>
+   #map svg{
+    background-color: #eafbf9;
+   }
+</style>
+ <script language="JavaScript">
+
+function loadMap(){
+var map = Kartograph.map('#map', 600, 0);
+
+map.loadMap('morocco.svg', function() {
+    
+    map.addLayer('world',{'name':'bg',
+                'styles': {
+                    'stroke': '#aaa',
+                    'fill': '#f6f4f2'
+                }});
+    map.addLayer('world',{'name':'moroccobg'});
+    map.addLayer('world',{'name':'moroccofg'});
+
+    
+    map.getLayer('moroccobg').style('stroke', function(data) {
+       return data.country == "Morocco" ? '#d8d6d4' : '#aaa';
+    }).style('stroke-width', function(data) {
+       return data.country == "Morocco" ? 10 : 1;
+    }).style('stroke-linejoin', function(data) {
+       return data.country == "Morocco" ? 'round' : null;
+    });
+    
+    map.getLayer('moroccofg').style('stroke', function(data) {
+       return data.country == "Morocco" ? '#333' : '#aaa';
+    }).style('fill', function(data) {
+       return data.country == "Morocco" ? '#fff' : null;
+    });
+
+
+ 
+    $.getJSON("http://www.flickr.com/services/feeds/geo/Morocco?jsoncallback=?",
+     {
+       format: "json"
+     },
+     function(data) {
+        var points = []
+        $.each(data.items, function(i,item){
+            points.push([new $K.LonLat(item.longitude,item.latitude),item.title,item.media.m]);
+            if ( i == 100 ) return false;
+        });
+
+        $.fn.qtip.defaults.style.classes = 'qtip-light';
+        map.addSymbols({
+           type: $K.Icon,
+           data: points,
+           location: function(d) {return d[0]; },
+           icon: function(d) { return d[2]; },
+           iconsize: [30,30],
+           offset: [-15,-15],
+           title: function(d) {return d[1]; },
+           tooltip: function(d) {return [d[1],'<img src="'+d[2]+'"/>'];},
+       });
+     });
+
+  
+}, { padding: -2 })
+};
+
+&lt;/script>
+    </head>
+    
+    <body onLoad="loadMap()">
+        <h3>Using Icon symbols with the Flickr API</h3>
+        <p><a href="bubblesCode.html">source code</a></p>
+        <div id="map"></div>
+    </body>
+</html>
+]]></script>
+<br/><br/><br/>
+</body>
+</html>

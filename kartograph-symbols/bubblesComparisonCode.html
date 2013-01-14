@@ -1,0 +1,333 @@
+<?xml version='1.0' encoding='utf-8' ?>
+<!DOCTYPE html PUBLIC "-W3CDTD XHTML 1.0 StrictEN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<title>Comparison of the clustering methods -- source code</title>
+
+<script type="text/javascript" src="http://agorbatchev.typepad.com/pub/sh/3_0_83/scripts/shCore.js"></script>
+<script type="text/javascript" src="http://agorbatchev.typepad.com/pub/sh/3_0_83/scripts/shBrushXml.js"></script>
+<link type="text/css" rel="stylesheet" href="http://agorbatchev.typepad.com/pub/sh/3_0_83/styles/shCore.css"/>
+<link type="text/css" rel="Stylesheet" href="http://agorbatchev.typepad.com/pub/sh/3_0_83/styles/shThemeDefault.css"/>
+<script type="text/javascript">SyntaxHighlighter.all();</script>
+</head>
+
+<body>
+
+<h3>Comparison of the clustering methods -- source code</h3>
+
+<p>
+This is the source code for the <a href="bubblesComparison.html">Comparison of the clustering methods</a> example
+</p>
+
+<script type="syntaxhighlighter" class="brush: html"><![CDATA[
+<!DOCTYPE html>
+<html>
+    <head>
+        <script src="lib/jquery.min.js">&lt;/script>
+        <script src="lib/raphael-min.js">&lt;/script>
+        <script src="lib/kartograph.min.js">&lt;/script>
+        <script src="lib/chroma.js">&lt;/script>
+        <script src="lib/proj4js-compressed.js">&lt;/script>
+        <script src="lib/jquery.qtip.js">&lt;/script>
+<link rel="stylesheet" type="text/css" href="lib/jquery.qtip.css"/>
+<style>
+   #map1 svg{
+    background-color: #eafbf9;
+   }
+   #map2 svg{
+    background-color: #eafbf9;
+   }
+   #map3 svg{
+    background-color: #eafbf9;
+   }
+   #map4 svg{
+    background-color: #eafbf9;
+   }
+</style>
+ <script language="JavaScript">
+
+function loadMap(){
+var map1 = Kartograph.map('#map1', 500, 0);
+var map2 = Kartograph.map('#map2', 500, 0);
+var map3 = Kartograph.map('#map3', 500, 0);
+var map4 = Kartograph.map('#map4', 500, 0);
+
+   
+
+$.ajax("./data/csv/ne_10m_populated_places.csv").done(
+function(data) {
+    map1.loadMap('morocco.svg', function() {
+    
+    map1.addLayer('world',{'name':'bg',
+                'styles': {
+                    'stroke': '#aaa',
+                    'fill': '#f6f4f2'
+                }});
+    map1.addLayer('world',{'name':'moroccobg'});
+    map1.addLayer('world',{'name':'moroccofg'});
+
+    
+    map1.getLayer('moroccobg').style('stroke', function(data) {
+       return data.country == "Morocco" ? '#d8d6d4' : '#aaa';
+    }).style('stroke-width', function(data) {
+       return data.country == "Morocco" ? 10 : 1;
+    }).style('stroke-linejoin', function(data) {
+       return data.country == "Morocco" ? 'round' : null;
+    });
+    
+    map1.getLayer('moroccofg').style('stroke', function(data) {
+       return data.country == "Morocco" ? '#333' : '#aaa';
+    }).style('fill', function(data) {
+       return data.country == "Morocco" ? '#fff' : null;
+    });
+
+
+ 
+
+        var points = [];
+        var textLines = data.split(/\r\n|\n/);
+        for (var i=1; i<textLines.length-1; i++) {
+            var fields = textLines[i].split(',');
+            points.push({lon: parseFloat(fields[22]), lat: parseFloat(fields[21]), name: fields[4], population: parseInt(fields[26])});
+        }
+        
+        $.fn.qtip.defaults.style.classes = 'qtip-light';
+        var scale = $K.scale.sqrt(points, 'population').range([0, 40]);
+
+        map1.addSymbols({
+            type: Kartograph.Bubble,
+            data: points,
+            location: function(d) { return [d.lon, d.lat]; },
+            radius: function(d) { return scale(d.population);},
+            tooltip: function(d) {
+                return '<h3>'+d.name+'</h3>population: '+d.population;
+            },
+            
+            sortBy: 'radius desc',
+            style: 'fill:#800; stroke: #fff; fill-opacity: 0.4;'
+      });
+     
+
+  
+}, { padding: -2 })
+
+map2.loadMap('morocco.svg', function() {
+    
+    map2.addLayer('world',{'name':'bg',
+                'styles': {
+                    'stroke': '#aaa',
+                    'fill': '#f6f4f2'
+                }});
+    map2.addLayer('world',{'name':'moroccobg'});
+    map2.addLayer('world',{'name':'moroccofg'});
+
+    
+    map2.getLayer('moroccobg').style('stroke', function(data) {
+       return data.country == "Morocco" ? '#d8d6d4' : '#aaa';
+    }).style('stroke-width', function(data) {
+       return data.country == "Morocco" ? 10 : 1;
+    }).style('stroke-linejoin', function(data) {
+       return data.country == "Morocco" ? 'round' : null;
+    });
+    
+    map2.getLayer('moroccofg').style('stroke', function(data) {
+       return data.country == "Morocco" ? '#333' : '#aaa';
+    }).style('fill', function(data) {
+       return data.country == "Morocco" ? '#fff' : null;
+    });
+
+        var points = [];
+        var textLines = data.split(/\r\n|\n/);
+        for (var i=1; i<textLines.length-1; i++) {
+            var fields = textLines[i].split(',');
+            points.push({lon: parseFloat(fields[22]), lat: parseFloat(fields[21]), name: fields[4], population: parseInt(fields[26])});
+        }
+        
+        $.fn.qtip.defaults.style.classes = 'qtip-light';
+        var scale = $K.scale.sqrt(points, 'population').range([0, 40]);
+
+        map2.addSymbols({
+            type: Kartograph.Bubble,
+            data: points,
+            location: function(d) { return [d.lon, d.lat]; },
+            radius: function(d) { return scale(d.population);},
+            tooltip: function(d) {
+                return '<h3>'+d.name+'</h3>population: '+d.population;
+            },
+            clustering: 'noverlap',
+            
+            aggregate: function(d){ 
+                       var name = ""
+                       var population = 0;
+                       $.each(d, function(i, city) {
+                           name += " "+city.name;
+                           population += city.population;
+                       });
+                       return { name: name, population: population };
+                       }, 
+            sortBy: 'radius desc',
+            style: 'fill:#800; stroke: #fff; fill-opacity: 0.4;'
+      });
+    
+}, { padding: -2 })
+
+
+map3.loadMap('morocco.svg', function() {
+    
+    map3.addLayer('world',{'name':'bg',
+                'styles': {
+                    'stroke': '#aaa',
+                    'fill': '#f6f4f2'
+                }});
+    map3.addLayer('world',{'name':'moroccobg'});
+    map3.addLayer('world',{'name':'moroccofg'});
+
+    
+    map3.getLayer('moroccobg').style('stroke', function(data) {
+       return data.country == "Morocco" ? '#d8d6d4' : '#aaa';
+    }).style('stroke-width', function(data) {
+       return data.country == "Morocco" ? 10 : 1;
+    }).style('stroke-linejoin', function(data) {
+       return data.country == "Morocco" ? 'round' : null;
+    });
+    
+    map3.getLayer('moroccofg').style('stroke', function(data) {
+       return data.country == "Morocco" ? '#333' : '#aaa';
+    }).style('fill', function(data) {
+       return data.country == "Morocco" ? '#fff' : null;
+    });
+
+
+ 
+
+        var points = [];
+        var textLines = data.split(/\r\n|\n/);
+        for (var i=1; i<textLines.length-1; i++) {
+            var fields = textLines[i].split(',');
+            points.push({lon: parseFloat(fields[22]), lat: parseFloat(fields[21]), name: fields[4], population: parseInt(fields[26])});
+        }
+        
+        $.fn.qtip.defaults.style.classes = 'qtip-light';
+        var scale = $K.scale.sqrt(points, 'population').range([0, 40]);
+
+        map3.addSymbols({
+            type: Kartograph.Bubble,
+            data: points,
+            location: function(d) { return [d.lon, d.lat]; },
+            radius: function(d) { return scale(d.population);},
+            tooltip: function(d) {
+                return '<h3>'+d.name+'</h3>population: '+d.population;
+            },
+            clustering: 'k-means',
+            clusteringOpts: {
+                size: 64
+            },
+            aggregate: function(d){ 
+                       var name = ""
+                       var population = 0;
+                       $.each(d, function(i, city) {
+                           name += " "+city.name;
+                           population += city.population;
+                       });
+                       return { name: name, population: population };
+                       }, 
+            sortBy: 'radius desc',
+            style: 'fill:#800; stroke: #fff; fill-opacity: 0.4;'
+      });
+       
+}, { padding: -2 })
+
+map4.loadMap('morocco.svg', function() {
+    
+    map4.addLayer('world',{'name':'bg',
+                'styles': {
+                    'stroke': '#aaa',
+                    'fill': '#f6f4f2'
+                }});
+    map4.addLayer('world',{'name':'moroccobg'});
+    map4.addLayer('world',{'name':'moroccofg'});
+
+    
+    map4.getLayer('moroccobg').style('stroke', function(data) {
+       return data.country == "Morocco" ? '#d8d6d4' : '#aaa';
+    }).style('stroke-width', function(data) {
+       return data.country == "Morocco" ? 10 : 1;
+    }).style('stroke-linejoin', function(data) {
+       return data.country == "Morocco" ? 'round' : null;
+    });
+    
+    map4.getLayer('moroccofg').style('stroke', function(data) {
+       return data.country == "Morocco" ? '#333' : '#aaa';
+    }).style('fill', function(data) {
+       return data.country == "Morocco" ? '#fff' : null;
+    });
+
+
+ 
+
+        var points = [];
+        var textLines = data.split(/\r\n|\n/);
+        for (var i=1; i<textLines.length-1; i++) {
+            var fields = textLines[i].split(',');
+            points.push({lon: parseFloat(fields[22]), lat: parseFloat(fields[21]), name: fields[4], population: parseInt(fields[26])});
+        }
+        
+        $.fn.qtip.defaults.style.classes = 'qtip-light';
+        var scale = $K.scale.sqrt(points, 'population').range([0, 40]);
+
+        map4.addSymbols({
+            type: Kartograph.Bubble,
+            data: points,
+            location: function(d) { return [d.lon, d.lat]; },
+            radius: function(d) { return scale(d.population);},
+            tooltip: function(d) {
+                return '<h3>'+d.name+'</h3>population: '+d.population;
+            },
+            clustering: 'k-means',
+            clusteringOpts: {
+                size: 10
+            },
+            aggregate: function(d){ 
+                       var name = ""
+                       var population = 0;
+                       $.each(d, function(i, city) {
+                           name += " "+city.name;
+                           population += city.population;
+                       });
+                       return { name: name, population: population };
+                       }, 
+            sortBy: 'radius desc',
+            style: 'fill:#800; stroke: #fff; fill-opacity: 0.4;'
+      });
+       
+}, { padding: -2 })
+
+});
+};
+
+&lt;/script>
+    </head>
+    
+    <body onLoad="loadMap()">
+        <h3>Comparison of the clustering methods</h3>
+        <p><a href="bubblesComparisonCode.html">source code</a></p>
+        <table>
+            <tr><th colspan=2>Clustering options in Kartograph.js</th></tr>
+            <tr><th>No clustering</th><th>noverlap</th></tr>
+            <tr>
+            <td width="500px"><div id="map1"></div></td>
+            <td width="500px"><div id="map2"></div></td>
+            </tr>
+            <tr><th>k-means (64 clusters)</th><th>k-means (10 clusters)</th></tr>
+            <tr>
+            <td width="500px"><div id="map3"></div></td>
+            <td width="500px"><div id="map4"></div></td>
+            </tr>
+        </table>
+    </body>
+</html>
+]]></script>
+<br/><br/><br/>
+</body>
+</html>

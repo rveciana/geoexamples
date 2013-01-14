@@ -1,5 +1,49 @@
-<html>
-<body>
-Test index page
+<!DOCTYPE html>
+<html >
+<head>
+<link rel="stylesheet" type="text/css" href="http://ajax.googleapis.com/ajax/libs/dojo/1.8/dijit/themes/claro/claro.css"> 
+<link rel="stylesheet" href="index/style.css" media="screen">
+
+<script>dojoConfig = {parseOnLoad: true}</script>
+<script src="//ajax.googleapis.com/ajax/libs/dojo/1.8.1/dojo/dojo.js"></script>
+
+<script>require(["dojo/parser", "dijit/layout/ContentPane", "dijit/layout/BorderContainer", "dijit/MenuBar", "dijit/MenuBarItem", "dijit/PopupMenuItem", "dijit/PopupMenuBarItem", "dijit/DropDownMenu"]);</script>
+</head>
+<body class="claro">
+    <div id="title"><img src="index/title.svg"/></div>
+    <div id="content">
+      <div data-dojo-type="dijit/layout/BorderContainer" data-dojo-props="design:'sidebar', gutters:true, liveSplitters:true" id="borderContainer">
+        <div data-dojo-type="dijit/layout/ContentPane" data-dojo-props="splitter:true, region:'top'" style="background-color:rgba(255,255,255,0);">
+            <div data-dojo-type="dijit/MenuBar" id="navMenu">
+                <div data-dojo-type="dijit/MenuBarItem" data-dojo-props="onClick:function(){dijit.byId('contentPane').set('href','home.html');}">Home</div>
+                <div data-dojo-type="dijit/PopupMenuBarItem">
+                <span>Kartograph</span>
+                <div data-dojo-type="dijit/DropDownMenu" id="fileMenu">
+                  <div data-dojo-type="dijit/PopupMenuItem">
+                     <span>Kartograph Electoral Map II</span>
+                     <div data-dojo-type="dijit/DropDownMenu">
+                         <div data-dojo-type="dijit/MenuItem" data-dojo-props="onClick:function(){dijit.byId('contentPane').set('content', dojo.create('iframe', {'src': 'kartograph-electoral-map-II/onlyMap.html','style': 'border: 0; width: 100%; height: 100%'}))}">Only map</div>
+                         <div data-dojo-type="dijit/MenuItem" data-dojo-props="onClick:function(){dijit.byId('contentPane').set('content', dojo.create('iframe', {'src': 'kartograph-electoral-map-II/styledMap.html','style': 'border: 0; width: 100%; height: 100%'}))}">Styled map</div>
+                        <div data-dojo-type="dijit/MenuItem" data-dojo-props="onClick:function(){dijit.byId('contentPane').set('content', dojo.create('iframe', {'src': 'kartograph-electoral-map-II/index.html','style': 'border: 0; width: 100%; height: 100%'}))}">Final map - tooltips</div>
+
+                     </div>
+                  </div>
+
+                  <div data-dojo-type="dijit/PopupMenuItem">
+                     <span>Kartograph Symbols</span>
+                     <div data-dojo-type="dijit/DropDownMenu">
+                         <div data-dojo-type="dijit/MenuItem" data-dojo-props="onClick:function(){dijit.byId('contentPane').set('content', dojo.create('iframe', {'src': 'kartograph-symbols/bubbles.html','style': 'border: 0; width: 100%; height: 100%'}))}">Bubbles</div>
+                         <div data-dojo-type="dijit/MenuItem" data-dojo-props="onClick:function(){dijit.byId('contentPane').set('content', dojo.create('iframe', {'src': 'kartograph-symbols/bubblesClustering.html','style': 'border: 0; width: 100%; height: 100%'}))}">Clustering</div>
+                         <div data-dojo-type="dijit/MenuItem" data-dojo-props="onClick:function(){dijit.byId('contentPane').set('content', dojo.create('iframe', {'src': 'kartograph-symbols/bubblesComparison.html','style': 'border: 0; width: 100%; height: 100%'}))}">Clustering Comparison</div>
+                        <div data-dojo-type="dijit/MenuItem" data-dojo-props="onClick:function(){dijit.byId('contentPane').set('content', dojo.create('iframe', {'src': 'kartograph-symbols/flickr.html','style': 'border: 0; width: 100%; height: 100%'}))}">Image Icons - Flickr</div>
+                    </div></div>
+                    
+                </div>
+                </div>
+            </div>
+         </div>
+        <div id="contentPane" data-dojo-type="dijit/layout/ContentPane" data-dojo-props="splitter:true, region:'center', href:'home.html'" style="background-color:rgba(255,255,255,0);"></div>
+      </div>
+    </div>
 </body>
 </html>
