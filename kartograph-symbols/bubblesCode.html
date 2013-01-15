@@ -88,16 +88,6 @@ map.loadMap('morocco.svg', function() {
             tooltip: function(d) {
                 return '<h3>'+d.name+'</h3>population: '+d.population;
             },
-            clustering: 'noverlap',
-            aggregate: function(d){ 
-                       var name = ""
-                       var population = 0;
-                       $.each(d, function(i, city) {
-                           name += " "+city.name;
-                           population += city.population;
-                       });
-                       return { name: name, population: population };
-                       }, 
             sortBy: 'radius desc',
             style: 'fill:#800; stroke: #fff; fill-opacity: 0.4;'
       });
