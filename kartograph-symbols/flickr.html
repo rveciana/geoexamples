@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <script src="lib/jquery.min.js"></script>
+        <script src="lib/raphael-min.js"></script>
+        <script src="lib/kartograph.min.js"></script>
+        <script src="lib/chroma.js"></script>
+        <script src="lib/proj4js-compressed.js"></script>
+        <script src="lib/jquery.qtip.js"></script>
+<link rel="stylesheet" type="text/css" href="lib/jquery.qtip.css"/>
+<style>
+   #map svg{
+    background-color: #eafbf9;
+   }
+</style>
+ <script language="JavaScript">
+
+function loadMap(){
+var map = Kartograph.map('#map', 600, 0);
+
+map.loadMap('morocco.svg', function() {
+    
+    map.addLayer('world',{'name':'bg',
+                'styles': {
+                    'stroke': '#aaa',
+                    'fill': '#f6f4f2'
+                }});
+    map.addLayer('world',{'name':'moroccobg'});
+    map.addLayer('world',{'name':'moroccofg'});
+
+    
+    map.getLayer('moroccobg').style('stroke', function(data) {
+       return data.country == "Morocco" ? '#d8d6d4' : '#aaa';
+    }).style('stroke-width', function(data) {
+       return data.country == "Morocco" ? 10 : 1;
+    }).style('stroke-linejoin', function(data) {
+       return data.country == "Morocco" ? 'round' : null;
+    });
+    
+    map.getLayer('moroccofg').style('stroke', function(data) {
+       return data.country == "Morocco" ? '#333' : '#aaa';
+    }).style('fill', function(data) {
+       return data.country == "Morocco" ? '#fff' : null;
+    });
+
+
+ 
+    $.getJSON("http://www.flickr.com/services/feeds/geo/Morocco?jsoncallback=?",
+     {
+       format: "json"
+     },
+     function(data) {
+        var points = []
+        $.each(data.items, function(i,item){
+            points.push([new $K.LonLat(item.longitude,item.latitude),item.title,item.media.m]);
+            if ( i == 100 ) return false;
+        });
+
+        $.fn.qtip.defaults.style.classes = 'qtip-light';
+        map.addSymbols({
+           type: $K.Icon,
+           data: points,
+           location: function(d) {return d[0]; },
+           icon: function(d) { return d[2]; },
+           iconsize: [30,30],
+           offset: [-15,-15],
+           title: function(d) {return d[1]; },
+           tooltip: function(d) {return [d[1],'<img src="'+d[2]+'"/>'];},
+       });
+     });
+
+  
+}, { padding: -2 })
+};
+
+</script>
+    </head>
+    
+    <body onLoad="loadMap()">
+        <h3>Using Icon symbols with the Flickr API</h3>
+        <p><a href="flickrCode.html">source code</a></p>
+        <div id="map"></div>
+    </body>
+</html>

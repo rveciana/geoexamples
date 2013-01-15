@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <script src="lib/jquery.min.js"></script>
+        <script src="lib/raphael-min.js"></script>
+        <script src="lib/kartograph.min.js"></script>
+        <script src="lib/chroma.js"></script>
+        <script src="lib/proj4js-compressed.js"></script>
+        <script src="lib/jquery.qtip.js"></script>
+<link rel="stylesheet" type="text/css" href="lib/jquery.qtip.css"/>
+<style>
+   #map svg{
+    background-color: #eafbf9;
+   }
+</style>
+ <script language="JavaScript">
+
+function loadMap(){
+var map = Kartograph.map('#map', 500, 0);
+
+map.loadMap('morocco.svg', function() {
+    
+    map.addLayer('world',{'name':'bg',
+                'styles': {
+                    'stroke': '#aaa',
+                    'fill': '#f6f4f2'
+                }});
+    map.addLayer('world',{'name':'moroccobg'});
+    map.addLayer('world',{'name':'moroccofg'});
+
+    
+    map.getLayer('moroccobg').style('stroke', function(data) {
+       return data.country == "Morocco" ? '#d8d6d4' : '#aaa';
+    }).style('stroke-width', function(data) {
+       return data.country == "Morocco" ? 10 : 1;
+    }).style('stroke-linejoin', function(data) {
+       return data.country == "Morocco" ? 'round' : null;
+    });
+    
+    map.getLayer('moroccofg').style('stroke', function(data) {
+       return data.country == "Morocco" ? '#333' : '#aaa';
+    }).style('fill', function(data) {
+       return data.country == "Morocco" ? '#fff' : null;
+    });
+
+
+ 
+    $.ajax("./data/csv/ne_10m_populated_places.csv").done(
+     function(data) {
+        var points = [];
+        var textLines = data.split(/\r\n|\n/);
+        for (var i=1; i<textLines.length; i++) {
+            var fields = textLines[i].split(',');
+            points.push({lon: parseFloat(fields[22]), lat: parseFloat(fields[21]), name: fields[4], population: parseInt(fields[26])});
+        }
+        
+        $.fn.qtip.defaults.style.classes = 'qtip-light';
+        var scale = $K.scale.sqrt(points, 'population').range([0, 40]);
+
+        map.addSymbols({
+            type: Kartograph.Bubble,
+            data: points,
+            location: function(d) { return [d.lon, d.lat]; },
+            radius: function(d) { return scale(d.population);},
+            tooltip: function(d) {
+                return '<h3>'+d.name+'</h3>population: '+d.population;
+            },
+            sortBy: 'radius desc',
+            style: 'fill:#800; stroke: #fff; fill-opacity: 0.4;'
+      });
+     });
+
+  
+}, { padding: -2 })
+};
+
+</script>
+    </head>
+    
+    <body onLoad="loadMap()">
+        <h3>Drawing symbols as "bubbles"</h3>
+        <p><a href="bubblesCode.html">source code</a></p>
+        <div id="map"></div>
+    </body>
+</html>
