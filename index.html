@@ -9,10 +9,15 @@
 
 <script>require(["dojo/ready", "dojo/dom-construct", "dojo/parser", "dijit/layout/ContentPane", "dijit/layout/BorderContainer", "dijit/MenuBar", "dijit/MenuBarItem", "dijit/PopupMenuItem", "dijit/PopupMenuBarItem", "dijit/DropDownMenu"], function(ready, domConstruct){
   ready(function(){
-    if(window.location.hash) {
-        var iframe = domConstruct.create('iframe', {'src': window.location.hash.replace("#",""),'style': 'border: 0; width: 100%; height: 100%'});
+
+    if(document.URL.indexOf('page=') >= 0) {
+        var url = document.URL.substr(document.URL.indexOf('page')).replace('page'+"=","");
+        var iframe = domConstruct.create('iframe', {'src': url,'style': 'border: 0; width: 100%; height: 100%'});
         
 	dijit.byId('contentPane').setContent(iframe);
+    } else {
+        var iframe = domConstruct.create('iframe', {'src': 'home.html' ,'style': 'border: 0; width: 100%; height: 100%'});
+        dijit.byId('contentPane').setContent(iframe);
     }
   });
 });
@@ -33,6 +38,8 @@
                   <div data-dojo-type="dijit/PopupMenuItem">
                   <span>SVG & Canvas</span>
                   <div data-dojo-type="dijit/DropDownMenu">
+                       <div data-dojo-type="dijit/MenuItem" data-dojo-props="onClick:function(){dijit.byId('contentPane').set('content', dojo.create('iframe', {'src': 'd3js/d3js_svgcanvas/basicSVG.html','style': 'border: 0; width: 100%; height: 100%'}))}">Basic SVG</div>
+                       <div data-dojo-type="dijit/MenuItem" data-dojo-props="onClick:function(){dijit.byId('contentPane').set('content', dojo.create('iframe', {'src': 'd3js/d3js_svgcanvas/basicCanvas.html','style': 'border: 0; width: 100%; height: 100%'}))}">Basic Canvas</div>
                        <div data-dojo-type="dijit/MenuItem" data-dojo-props="onClick:function(){dijit.byId('contentPane').set('content', dojo.create('iframe', {'src': 'd3js/d3js_svgcanvas/rotatingSVG.html','style': 'border: 0; width: 100%; height: 100%'}))}">Rotating SVG</div>
                        <div data-dojo-type="dijit/MenuItem" data-dojo-props="onClick:function(){dijit.byId('contentPane').set('content', dojo.create('iframe', {'src': 'd3js/d3js_svgcanvas/rotatingCanvas.html','style': 'border: 0; width: 100%; height: 100%'}))}">Rotating Canvas</div>
                   </div>

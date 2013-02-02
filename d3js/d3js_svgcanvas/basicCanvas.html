@@ -27,7 +27,7 @@ var projection = d3.geo.orthographic()
 var canvas = d3.select("#map").append("canvas")
     .attr("width", diameter)
     .attr("height", diameter);
-console.info(d3.select("map"));
+
 var path = d3.geo.path()
     .projection(projection);
 
@@ -35,12 +35,17 @@ d3.json("./world-110m.json", function(error, world) {
   var land = topojson.object(world, world.objects.land),
       globe = {type: "Sphere"};
       context = canvas.node().getContext("2d");
-      context.fillStyle = '#d7c7ad';
+  
       context.strokeStyle = '#766951';
-      context.clearRect(0, 0, diameter, diameter);
+      
+      context.fillStyle = '#d8ffff';
+      context.beginPath(), path.context(context)(globe), context.fill();
+      context.beginPath(), path.context(context)(globe), context.stroke();
+      context.fillStyle = '#d7c7ad';
       context.beginPath(), path.context(context)(land), context.fill();
       context.beginPath(), path.context(context)(land), context.stroke();
-      context.beginPath(), path(globe), context.stroke();
+
+      
 });
 
 </script>

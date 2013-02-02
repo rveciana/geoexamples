@@ -3,7 +3,7 @@
 <style>
 
 .foreground {
-  fill: none;
+  fill: #d8ffff;
   stroke: #333;
   stroke-width: 1.5px;
 }
@@ -49,6 +49,7 @@ var path = d3.geo.path()
 d3.json("./world-110m.json", function(error, world) {
 
   var globe = {type: "Sphere"};
+
     svg.append("path")
     .datum(globe)
     .attr("class", "foreground")
