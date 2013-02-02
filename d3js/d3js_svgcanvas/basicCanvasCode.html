@@ -1,0 +1,77 @@
+<?xml version='1.0' encoding='utf-8' ?>
+<!DOCTYPE html PUBLIC "-W3CDTD XHTML 1.0 StrictEN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<title>Clustering bubbles with "noverlap" method -- source code</title>
+
+<script type="text/javascript" src="http://agorbatchev.typepad.com/pub/sh/3_0_83/scripts/shCore.js"></script>
+<script type="text/javascript" src="http://agorbatchev.typepad.com/pub/sh/3_0_83/scripts/shBrushXml.js"></script>
+<link type="text/css" rel="stylesheet" href="http://agorbatchev.typepad.com/pub/sh/3_0_83/styles/shCore.css"/>
+<link type="text/css" rel="Stylesheet" href="http://agorbatchev.typepad.com/pub/sh/3_0_83/styles/shThemeDefault.css"/>
+<script type="text/javascript">SyntaxHighlighter.all();</script>
+</head>
+
+<body>
+
+<h3>Basic map with D3.js using Canvas -- source code</h3>
+
+<p>
+This is the source code for the <a href="basicCanvas.html">Basic map with D3.js using Canvas</a> example
+</p>
+
+<script type="syntaxhighlighter" class="brush: html"><![CDATA[
+<!DOCTYPE html>
+<meta charset="utf-8">
+
+<body>
+
+<h3>Basic map with D3.js using Canvas</h3>
+<p><a href="basicCanvasCode.html">source code</a></p>
+<div id="map"></div>
+
+<script src="http://d3js.org/d3.v3.min.js">&lt;/script>
+<script src="http://d3js.org/topojson.v0.min.js">&lt;/script>
+<script>
+
+var diameter = 960 / 3,
+    radius = diameter >> 1,
+    velocity = .01,
+    then = Date.now();
+
+var projection = d3.geo.orthographic()
+    .scale(radius - 2)
+    .translate([radius, radius])
+    .clipAngle(90)
+    .precision(0)
+    .rotate([10,0,0]);
+
+
+var canvas = d3.select("#map").append("canvas")
+    .attr("width", diameter)
+    .attr("height", diameter);
+console.info(d3.select("map"));
+var path = d3.geo.path()
+    .projection(projection);
+
+d3.json("./world-110m.json", function(error, world) {
+  var land = topojson.object(world, world.objects.land),
+      globe = {type: "Sphere"};
+      context = canvas.node().getContext("2d");
+      context.fillStyle = '#d7c7ad';
+      context.strokeStyle = '#766951';
+      context.clearRect(0, 0, diameter, diameter);
+      context.beginPath(), path.context(context)(land), context.fill();
+      context.beginPath(), path.context(context)(land), context.stroke();
+      context.beginPath(), path(globe), context.stroke();
+});
+
+&lt;/script>
+
+
+</body>
+</html>
+]]></script>
+<br/><br/><br/>
+</body>
+</html>

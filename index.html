@@ -7,7 +7,17 @@
 <script>dojoConfig = {parseOnLoad: true}</script>
 <script src="//ajax.googleapis.com/ajax/libs/dojo/1.8.1/dojo/dojo.js"></script>
 
-<script>require(["dojo/parser", "dijit/layout/ContentPane", "dijit/layout/BorderContainer", "dijit/MenuBar", "dijit/MenuBarItem", "dijit/PopupMenuItem", "dijit/PopupMenuBarItem", "dijit/DropDownMenu"]);</script>
+<script>require(["dojo/ready", "dojo/dom-construct", "dojo/parser", "dijit/layout/ContentPane", "dijit/layout/BorderContainer", "dijit/MenuBar", "dijit/MenuBarItem", "dijit/PopupMenuItem", "dijit/PopupMenuBarItem", "dijit/DropDownMenu"], function(ready, domConstruct){
+  ready(function(){
+    if(window.location.hash) {
+        var iframe = domConstruct.create('iframe', {'src': window.location.hash.replace("#",""),'style': 'border: 0; width: 100%; height: 100%'});
+        
+	dijit.byId('contentPane').setContent(iframe);
+    }
+  });
+});
+
+</script>
 </head>
 <body class="claro">
     <div id="title"><img src="index/title.svg"/></div>
@@ -16,9 +26,24 @@
         <div data-dojo-type="dijit/layout/ContentPane" data-dojo-props="splitter:true, region:'top'" style="background-color:rgba(255,255,255,0);">
             <div data-dojo-type="dijit/MenuBar" id="navMenu">
                 <div data-dojo-type="dijit/MenuBarItem" data-dojo-props="onClick:function(){dijit.byId('contentPane').set('href','home.html');}">Home</div>
+<!-- D3js -->
+            <div data-dojo-type="dijit/PopupMenuBarItem">
+            <span>D3js</span>
+            <div data-dojo-type="dijit/DropDownMenu" id="d3jsMenu">
+                  <div data-dojo-type="dijit/PopupMenuItem">
+                  <span>SVG & Canvas</span>
+                  <div data-dojo-type="dijit/DropDownMenu">
+                       <div data-dojo-type="dijit/MenuItem" data-dojo-props="onClick:function(){dijit.byId('contentPane').set('content', dojo.create('iframe', {'src': 'd3js/d3js_svgcanvas/rotatingSVG.html','style': 'border: 0; width: 100%; height: 100%'}))}">Rotating SVG</div>
+                       <div data-dojo-type="dijit/MenuItem" data-dojo-props="onClick:function(){dijit.byId('contentPane').set('content', dojo.create('iframe', {'src': 'd3js/d3js_svgcanvas/rotatingCanvas.html','style': 'border: 0; width: 100%; height: 100%'}))}">Rotating Canvas</div>
+                  </div>
+                  </div>
+            </div>
+            </div>
+<!-- D3js -->
+<!-- Kartograph -->
                 <div data-dojo-type="dijit/PopupMenuBarItem">
                 <span>Kartograph</span>
-                <div data-dojo-type="dijit/DropDownMenu" id="fileMenu">
+                <div data-dojo-type="dijit/DropDownMenu" id="kartographMenu">
                   <div data-dojo-type="dijit/PopupMenuItem">
                      <span>Kartograph Electoral Map II</span>
                      <div data-dojo-type="dijit/DropDownMenu">
@@ -40,9 +65,12 @@
                     
                 </div>
                 </div>
+
+
+<!-- -->
             </div>
          </div>
-        <div id="contentPane" data-dojo-type="dijit/layout/ContentPane" data-dojo-props="splitter:true, region:'center', href:'home.html'" style="background-color:rgba(255,255,255,0);"></div>
+        <div id="contentPane" data-dojo-type="dijit/layout/ContentPane" data-dojo-props="splitter:true, region:'center'" style="background-color:rgba(255,255,255,0);"></div>
       </div>
     </div>
 </body>

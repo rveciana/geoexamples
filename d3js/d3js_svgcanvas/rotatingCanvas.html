@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<meta charset="utf-8">
+<style>
+
+.title {
+  display: inline-block;
+  font-size: 48px;
+  line-height: 90px;
+  text-align: center;
+}
+
+</style>
+<body>
+<script src="http://d3js.org/d3.v3.min.js"></script>
+<script src="http://d3js.org/topojson.v0.min.js"></script>
+<script>
+
+var diameter = 960 / 3,
+    radius = diameter >> 1,
+    velocity = .01,
+    then = Date.now();
+
+var projection = d3.geo.orthographic()
+    .scale(radius - 2)
+    .translate([radius, radius])
+    .clipAngle(90)
+    .precision(0);
+
+var canvas = d3.select("body").append("canvas")
+    .attr("width", diameter)
+    .attr("height", diameter);
+
+var path = d3.geo.path()
+    .projection(projection);
+
+d3.json("./world-110m.json", function(error, world) {
+  var land = topojson.object(world, world.objects.land),
+      globe = {type: "Sphere"};
+
+  
+  d3.timer(function() {
+    var angle = velocity * (Date.now() - then);
+    context = canvas.node().getContext("2d");
+    context.fillStyle = '#d7c7ad';
+
+    projection.rotate([angle,0,0]);
+    context.clearRect(0, 0, diameter, diameter);
+    context.beginPath(), path.context(context)(land), context.fill();
+    context.beginPath(), path(globe), context.stroke();
+  });
+});
+
+</script>
+

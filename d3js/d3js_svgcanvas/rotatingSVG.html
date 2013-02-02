@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<meta charset="utf-8">
+
+<style>
+
+body {
+  height: 500px;
+  position: relative;
+  width: 960px;
+}
+
+
+
+.background {
+  fill: #a4bac7;
+}
+
+.foreground {
+  fill: none;
+  stroke: #333;
+  stroke-width: 1.5px;
+}
+
+
+.land {
+  fill: #d7c7ad;
+  stroke: #766951;
+}
+
+.boundary {
+  fill: none;
+  stroke: #a5967e;
+}
+
+</style>
+<body>
+<script src="http://d3js.org/d3.v3.min.js"></script>
+<script src="http://d3js.org/topojson.v0.min.js"></script>
+<script>
+
+var diameter = 960 / 3,
+    radius = diameter >> 1,
+    velocity = .01,
+    then = Date.now();
+
+var projection = d3.geo.orthographic()
+    .scale(radius - 2)
+    .translate([radius, radius])
+    .clipAngle(90)
+    .precision(0);
+
+var svg = d3.select("body").append("svg")
+    .attr("width", diameter)
+    .attr("height", diameter);
+
+var path = d3.geo.path()
+    .projection(projection);
+
+var globe = {type: "Sphere"};
+svg.append("path")
+    .datum(globe)
+    .attr("class", "foreground")
+    .attr("d", path);
+
+
+d3.json("./world-110m.json", function(error, world) {
+
+  var land = topojson.object(world, world.objects.land),
+      globe = {type: "Sphere"};
+
+      svg.insert("path", ".graticule")
+      .datum(topojson.object(world, world.objects.land))
+      .attr("class", "land")
+      .attr("d", path);
+
+      /*svg.insert("path", ".graticule")
+      .datum(topojson.mesh(world, world.objects.countries, function(a, b) { return a.id !== b.id; }))
+      .attr("class", "boundary")
+      .attr("d", path);*/
+
+
+
+  d3.timer(function() {
+    var angle = velocity * (Date.now() - then);
+    projection.rotate([angle,0,0]);
+    svg.selectAll("path")
+      .attr("d", path.projection(projection));
+  });
+  
+});
+
+</script>
+
