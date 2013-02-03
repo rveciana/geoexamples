@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<meta charset="utf-8">
+<style>
+
+.foreground {
+  fill: #d8ffff;
+  stroke: #333;
+  stroke-width: 1.5px;
+}
+
+
+.land {
+  fill: #d7c7ad;
+  stroke: #766951;
+}
+
+</style>
+
+<body>
+
+<h3>Basic map with D3.js using SVG</h3>
+<p><a href="basicSVGCode.html">source code</a></p>
+<div id="map"></div>
+
+<script src="http://d3js.org/d3.v3.min.js"></script>
+<script src="http://d3js.org/topojson.v0.min.js"></script>
+<script>
+
+var diameter = 960 / 3,
+    radius = diameter >> 1,
+    velocity = .01,
+    then = Date.now();
+
+var projection = d3.geo.orthographic()
+    .scale(radius - 2)
+    .translate([radius, radius])
+    .clipAngle(90)
+    .precision(0)
+    .rotate([10,0,0]);
+
+var svg = d3.select("#map").append("svg")
+    .attr("width", diameter)
+    .attr("height", diameter);
+
+var path = d3.geo.path()
+    .projection(projection);
+
+
+d3.json("./world-110m.json", function(error, world) {
+
+  var globe = {type: "Sphere"};
+
+    svg.append("path")
+    .datum(globe)
+    .attr("class", "foreground")
+    .attr("d", path);
+
+  var land = topojson.object(world, world.objects.land);
+
+      svg.insert("path")
+      .datum(topojson.object(world, world.objects.land))
+      .attr("class", "land")
+      .attr("d", path);
+ 
+});
+
+</script>
+
+</body>
+</html>
