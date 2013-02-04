@@ -11,16 +11,13 @@
 <script src="http://d3js.org/topojson.v0.min.js"></script>
 <script>
 
-var diameter = 960 / 3,
-    radius = diameter >> 1,
-    velocity = .01,
-    then = Date.now();
+var diameter = 320,
+    radius = diameter/2;
 
 var projection = d3.geo.orthographic()
     .scale(radius - 2)
     .translate([radius, radius])
     .clipAngle(90)
-    .precision(0)
     .rotate([10,0,0]);
 
 
@@ -39,11 +36,11 @@ d3.json("./world-110m.json", function(error, world) {
       context.strokeStyle = '#766951';
       
       context.fillStyle = '#d8ffff';
-      context.beginPath(), path.context(context)(globe), context.fill();
-      context.beginPath(), path.context(context)(globe), context.stroke();
+      context.beginPath(), path.context(context)(globe), context.fill(), context.stroke();
+
       context.fillStyle = '#d7c7ad';
-      context.beginPath(), path.context(context)(land), context.fill();
-      context.beginPath(), path.context(context)(land), context.stroke();
+      context.beginPath(), path.context(context)(land), context.fill(), context.stroke();
+
 
       
 });
