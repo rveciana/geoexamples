@@ -26,16 +26,13 @@
 <script src="http://d3js.org/topojson.v0.min.js"></script>
 <script>
 
-var diameter = 960 / 3,
-    radius = diameter >> 1,
-    velocity = .01,
-    then = Date.now();
+var diameter = 320,
+    radius = diameter/2;
 
 var projection = d3.geo.orthographic()
     .scale(radius - 2)
     .translate([radius, radius])
     .clipAngle(90)
-    .precision(0)
     .rotate([10,0,0]);
 
 var svg = d3.select("#map").append("svg")

@@ -33,16 +33,15 @@ This is the source code for the <a href="rotatingCanvas.html">Rotating map with 
 <script src="http://d3js.org/topojson.v0.min.js">&lt;/script>
 <script>
 
-var diameter = 960 / 3,
-    radius = diameter >> 1,
+var diameter = 320,
+    radius = diameter/2,
     velocity = .01,
     then = Date.now();
 
 var projection = d3.geo.orthographic()
     .scale(radius - 2)
     .translate([radius, radius])
-    .clipAngle(90)
-    .precision(0);
+    .clipAngle(90);
 
 var canvas = d3.select("#map").append("canvas")
     .attr("width", diameter)

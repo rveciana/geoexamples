@@ -50,15 +50,12 @@ This is the source code for the <a href="basicSVG.html">Basic map with D3.js usi
 <script>
 
 var diameter = 960 / 3,
-    radius = diameter >> 1,
-    velocity = .01,
-    then = Date.now();
+    radius = diameter >> 1;
 
 var projection = d3.geo.orthographic()
     .scale(radius - 2)
     .translate([radius, radius])
     .clipAngle(90)
-    .precision(0)
     .rotate([10,0,0]);
 
 var svg = d3.select("#map").append("svg")

@@ -49,16 +49,15 @@ This is the source code for the <a href="rotatingSVG.html">Rotating map with D3.
 <script src="http://d3js.org/topojson.v0.min.js">&lt;/script>
 <script>
 
-var diameter = 960 / 3,
-    radius = diameter >> 1,
+var diameter = 320,
+    radius = diameter/2,
     velocity = .01,
     then = Date.now();
 
 var projection = d3.geo.orthographic()
     .scale(radius - 2)
     .translate([radius, radius])
-    .clipAngle(90)
-    .precision(0);
+    .clipAngle(90);
 
 var svg = d3.select("#map").append("svg")
     .attr("width", diameter)
@@ -79,7 +78,7 @@ d3.json("./world-110m.json", function(error, world) {
   var land = topojson.object(world, world.objects.land),
       globe = {type: "Sphere"};
 
-      svg.insert("path", ".graticule")
+      svg.insert("path")
       .datum(topojson.object(world, world.objects.land))
       .attr("class", "land")
       .attr("d", path);
