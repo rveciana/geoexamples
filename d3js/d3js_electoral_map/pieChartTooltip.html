@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<meta charset="utf-8">
+<style>
+body { font-family: "Helvetica Neue", Helvetica, sans-serif; }
+.municipality {
+    stroke: #000;
+    stroke-width: 0.5px;
+}
+
+.CiU  { fill: #005aff;}
+.PSC { fill: #ff3333; }
+.ERC { fill: #ed7e1e; }
+.PP { fill: #99edff; }
+.ICV-EUiA { fill: #74ff74; }
+.CUP { fill: #ffed00; }
+.Cs { fill: #fb7d7d; }
+
+.tooltip{ background-color:rgba(255,255,255,0.7);
+          margin: 10px;
+          height: 260px;
+          width: 300px;
+          padding-left: 10px; 
+          padding-top: 10px;
+	  -webkit-border-radius:10px;
+	  -moz-border-radius:10px;
+	  border-radius:10px;
+        }
+</style>
+<body>
+<select id="position">
+  <option value="1">First</option>
+  <option value="2">Second</option>
+  <option value="3">Third</option>
+  <option value="4">Fourth</option>
+  <option value="5">Fifth</option>
+  <option value="6">Sixth</option>
+  <option value="7">Seventh</option>
+</select>
+<div id="map"></div>
+<img src="legend.png"/>
+
+<script src="http://d3js.org/d3.v3.min.js"></script>
+<script src="http://d3js.org/topojson.v0.min.js"></script>
+
+<script type="text/javascript">
+
+var width = 600,
+    height = 600;
+
+var projection = d3.geo.mercator()
+    .center([2,41.5])
+    .scale(50000)
+    .translate([width / 2, height / 2]);
+
+var path = d3.geo.path()
+    .projection(projection);
+
+var svg = d3.select("#map").append("svg")
+    .attr("width", width)
+    .attr("height", height);
+
+var color = d3.scale.ordinal()
+    .range(["#005aff", "#ff3333", "#ed7e1e", "#99edff", "#74ff74", "#ffed00", "#fb7d7d"]);
+d3.helper = {};
+d3.helper.tooltip = function (accessor){
+    return function(selection){
+	var tooltipDiv;
+        var bodyNode = d3.select('body').node();
+        selection.on("mouseover", function(d, i){
+            d3.select('body').selectAll('div.tooltip').remove();
+            tooltipDiv = d3.select('body').append('div').attr('class', 'tooltip');
+            var absoluteMousePos = d3.mouse(bodyNode);
+            tooltipDiv.style('left', (absoluteMousePos[0] + 10)+'px')
+                .style('top', (absoluteMousePos[1] - 15)+'px')
+                .style('position', 'absolute') 
+                .style('z-index', 1001);
+            var arc = d3.svg.arc()
+                .outerRadius(120)
+                .innerRadius(40);
+
+            var pie = d3.layout.pie()
+               .sort(null)
+               .value(function(d) { return d.votes; });
+
+            var svg = tooltipDiv.append("svg")
+                .attr("width", 270)
+                .attr("height", 300)
+                .append("g")
+                .attr("transform", "translate(" + 270 / 2 + "," + 270 / 2 + ")");
+ 
+            var data = [
+                {'party':"CiU",'votes':d.properties["CiU"]},
+                {'party':"PSC",'votes':d.properties["PSC"]},
+                {'party':"ERC",'votes':d.properties["ERC"]},
+                {'party':"PP",'votes':d.properties["PP"]},
+                {'party':"ICV",'votes':d.properties["ICV-EUiA"]},
+                {'party':"CUP",'votes':d.properties["CUP"]}, 
+                {'party':"C's",'votes':d.properties["C's"]}
+            ];
+            data.forEach(function(d) {
+                d.votes = +d.votes;
+            });
+
+  
+
+            var g = svg.selectAll(".arc")
+               .data(pie(data))
+               .enter().append("g")
+               .attr("class", "arc");
+
+            g.append("path")
+              .attr("d", arc)
+              .style("fill", function(d) { return color(d.data.party); });
+            g.append("text")
+              .attr("transform", function(d) { var angle =(180/Math.PI) * (d.startAngle + (d.endAngle-d.startAngle)/2); return "translate(" + arc.centroid(d) + ") rotate("+angle+", 0,0)"; })
+              .attr("dy", "-2.5em")
+              .style("text-anchor", "middle")
+              .text(function(d) { return d.data.party; });
+
+  
+
+          var municipality = d.properties['Name'];
+          
+          svg.append("text")
+              .attr("transform", "translate(0,140)")
+              .attr("dy", ".35em")
+              .style("text-anchor", "middle")
+              .text(municipality);
+            
+                      
+        })
+        .on('mousemove', function(d, i) {
+            var absoluteMousePos = d3.mouse(bodyNode);
+            tooltipDiv.style('left', (absoluteMousePos[0] + 10)+'px')
+                .style('top', (absoluteMousePos[1] - 15)+'px');
+            var tooltipText = accessor(d, i) || '';
+            //tooltipDiv.html(tooltipText);
+            
+        })
+        .on("mouseout", function(d, i){
+            tooltipDiv.remove();
+        });
+    };    
+};
+
+
+d3.json("mun_out_topo.json", function(error, topo) {
+  svg.selectAll("municipality")
+      .data(topojson.object(topo, topo.objects.mun_out).geometries)
+    .enter().append("path")
+      .attr("class", function(d) {return "municipality " + selectParty(d,1);})
+      .attr("d", path)
+      .call(d3.helper.tooltip(function(d, i){return d;}));
+      
+      function selectParty(d,position){
+  
+           var positions = new Array();
+           positions[0] = parseInt(d.properties["CiU"]);
+           positions[1] = parseInt(d.properties["PSC"]);
+           positions[2] = parseInt(d.properties["ERC"]);
+           positions[3] = parseInt(d.properties["PP"]);
+           positions[4] = parseInt(d.properties["ICV-EUiA"]);
+           positions[5] = parseInt(d.properties["CUP"]);
+           positions[6] = parseInt(d.properties["C's"]);
+
+           positions.sort(function(a,b) { return b-a; });
+           
+           var party = null;
+           if (positions[position-1] == parseInt(d.properties["CiU"])){
+               party = "CiU";
+           } else if (positions[position-1] == parseInt(d.properties["PSC"])){
+               party = "PSC";               
+           } else if (positions[position-1] == parseInt(d.properties["ERC"])){
+               party = "ERC";               
+           } else if (positions[position-1] == parseInt(d.properties["PP"])){
+               party = "PP";               
+           } else if (positions[position-1] == parseInt(d.properties["ICV-EUiA"])){
+               party = "ICV-EUiA";               
+           } else if (positions[position-1] == parseInt(d.properties["CUP"])){
+               party = "CUP";               
+           } else if (positions[position-1] == parseInt(d.properties["C's"])){
+               party = "Cs";               
+           }
+    
+           return party;
+      }
+
+
+
+      function tooltipText(d){
+           return "<b>" + d.properties["Name"] + "</b>"
+                  + "<br/> CiU: " + d.properties["CiU"] 
+                  + "<br/> PSC: " + d.properties["PSC"]
+                  + "<br/> ERC: " + d.properties["ERC"]
+                  + "<br/> PP: " + d.properties["PP"]
+                  + "<br/> ICV-EUiA: " + d.properties["ICV-EUiA"]
+                  + "<br/> CUP: " + d.properties["CUP"]
+                  + "<br/> C's: " + d.properties["C's"];
+      }
+
+      
+      d3.select("#position").on("change", function() {
+           
+           var position = parseInt(this.value);
+           svg.transition()
+           .selectAll(".municipality")
+           .attr("class", function(d) {return "municipality " + selectParty(d,position);});
+      });
+
+});
+
+</script>
+
