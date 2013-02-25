@@ -185,19 +185,6 @@ d3.json("mun_out_topo.json", function(error, topo) {
            return party;
       }
 
-
-
-      function tooltipText(d){
-           return "<b>" + d.properties["Name"] + "</b>"
-                  + "<br/> CiU: " + d.properties["CiU"] 
-                  + "<br/> PSC: " + d.properties["PSC"]
-                  + "<br/> ERC: " + d.properties["ERC"]
-                  + "<br/> PP: " + d.properties["PP"]
-                  + "<br/> ICV-EUiA: " + d.properties["ICV-EUiA"]
-                  + "<br/> CUP: " + d.properties["CUP"]
-                  + "<br/> C's: " + d.properties["C's"];
-      }
-
       
       d3.select("#position").on("change", function() {
            
