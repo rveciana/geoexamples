@@ -44,6 +44,15 @@
                        <div data-dojo-type="dijit/MenuItem" data-dojo-props="onClick:function(){dijit.byId('contentPane').set('content', dojo.create('iframe', {'src': 'd3js/d3js_svgcanvas/rotatingCanvas.html','style': 'border: 0; width: 100%; height: 100%'}))}">Rotating Canvas</div>
                   </div>
                   </div>
+                  <div data-dojo-type="dijit/PopupMenuItem">
+                  <span>Electoral map</span>
+                  <div data-dojo-type="dijit/DropDownMenu">
+                       <div data-dojo-type="dijit/MenuItem" data-dojo-props="onClick:function(){dijit.byId('contentPane').set('content', dojo.create('iframe', {'src': 'd3js/d3js_electoral_map/simpleMap.html','style': 'border: 0; width: 100%; height: 100%'}))}">Basic map</div>
+                       <div data-dojo-type="dijit/MenuItem" data-dojo-props="onClick:function(){dijit.byId('contentPane').set('content', dojo.create('iframe', {'src': 'd3js/d3js_electoral_map/selectOrder.html','style': 'border: 0; width: 100%; height: 100%'}))}">Select Order</div>
+                       <div data-dojo-type="dijit/MenuItem" data-dojo-props="onClick:function(){dijit.byId('contentPane').set('content', dojo.create('iframe', {'src': 'd3js/d3js_electoral_map/simpleTooltip.html','style': 'border: 0; width: 100%; height: 100%'}))}">Simple Tooltip</div>
+                       <div data-dojo-type="dijit/MenuItem" data-dojo-props="onClick:function(){dijit.byId('contentPane').set('content', dojo.create('iframe', {'src': 'd3js/d3js_electoral_map/pieChartTooltip.html','style': 'border: 0; width: 100%; height: 100%'}))}">Pie Chart Tooltip</div>
+                       </div>
+                  </div>
             </div>
             </div>
 <!-- D3js -->

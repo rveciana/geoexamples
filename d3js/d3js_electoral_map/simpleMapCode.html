@@ -1,0 +1,84 @@
+<?xml version='1.0' encoding='utf-8' ?>
+<!DOCTYPE html PUBLIC "-W3CDTD XHTML 1.0 StrictEN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<title>"Simple map" electoral map -- source code</title>
+
+<script type="text/javascript" src="http://agorbatchev.typepad.com/pub/sh/3_0_83/scripts/shCore.js"></script>
+<script type="text/javascript" src="http://agorbatchev.typepad.com/pub/sh/3_0_83/scripts/shBrushJScript.js"></script>
+<link type="text/css" rel="stylesheet" href="http://agorbatchev.typepad.com/pub/sh/3_0_83/styles/shCore.css"/>
+<link type="text/css" rel="Stylesheet" href="http://agorbatchev.typepad.com/pub/sh/3_0_83/styles/shThemeDefault.css"/>
+<script type="text/javascript">SyntaxHighlighter.all();</script>
+</head>
+
+<body>
+
+<h3>"Simple map" electoral map -- source code</h3>
+
+<p>
+This is the source code for the <a href="simpleMap.html">"Simple map" electoral map</a> example
+</p>
+
+<script type="syntaxhighlighter" class="brush: js"><![CDATA[
+<!DOCTYPE html>
+<meta charset="utf-8">
+<style>
+.municipality {
+    stroke: #000;
+    stroke-width: 0.5px;
+}
+.CiU  { fill: #005aff;}
+.PSC { fill: #ff3333; }
+.ERC { fill: #ed7e1e; }
+.PP { fill: #99edff; }
+.ICV-EUiA { fill: #74ff74; }
+.CUP { fill: #ffed00; }
+.Cs { fill: #fb7d7d; }
+
+</style>
+<body>
+<div id="map"></div>
+<img src="legend.png"/>
+<script src="http://d3js.org/d3.v3.min.js">&lt;/script>
+<script src="http://d3js.org/topojson.v0.min.js">&lt;/script>
+<script>
+
+var width = 600,
+    height = 600;
+
+var projection = d3.geo.mercator()
+    .center([2,41.5])
+    .scale(50000)
+    .translate([width / 2, height / 2]);
+
+var path = d3.geo.path()
+    .projection(projection);
+
+var svg = d3.select("#map").append("svg")
+    .attr("width", width)
+    .attr("height", height);
+
+d3.json("mun_out_topo.json", function(error, topo) {
+  svg.selectAll()
+      .data(topojson.object(topo, topo.objects.mun_out).geometries)
+    .enter().append("path")
+      .attr("class", function(d) {
+           var maxVotes = 0;
+           var party = null;
+           if (d.properties["CiU"]>maxVotes){maxVotes = d.properties["CiU"]; party="CiU";}
+           if (d.properties["PSC"]>maxVotes){maxVotes = d.properties["PSC"]; party="PSC";}
+           if (d.properties["ERC"]>maxVotes){maxVotes = d.properties["ERC"]; party="ERC";}
+           if (d.properties["ICV-EUiA"]>maxVotes){maxVotes = d.properties["ICV-EUiA"]; party="ICV-EUiA";}
+           if (d.properties["CUP"]>maxVotes){maxVotes = d.properties["CUP"]; party="CUP";}
+           if (d.properties["C's"]>maxVotes){maxVotes = d.properties["C's"]; party="Cs";}
+           return "municipality " + party; 
+       })
+      .attr("d", path);
+});
+
+&lt;/script>
+]]></script>
+<br/><br/><br/>
+</body>
+</html>

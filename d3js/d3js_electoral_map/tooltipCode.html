@@ -1,0 +1,65 @@
+<?xml version='1.0' encoding='utf-8' ?>
+<!DOCTYPE html PUBLIC "-W3CDTD XHTML 1.0 StrictEN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<title>Tooltip for "simple tooltip" electoral map -- source code</title>
+
+<script type="text/javascript" src="http://agorbatchev.typepad.com/pub/sh/3_0_83/scripts/shCore.js"></script>
+<script type="text/javascript" src="http://agorbatchev.typepad.com/pub/sh/3_0_83/scripts/shBrushJScript.js"></script>
+<link type="text/css" rel="stylesheet" href="http://agorbatchev.typepad.com/pub/sh/3_0_83/styles/shCore.css"/>
+<link type="text/css" rel="Stylesheet" href="http://agorbatchev.typepad.com/pub/sh/3_0_83/styles/shThemeDefault.css"/>
+<script type="text/javascript">SyntaxHighlighter.all();</script>
+</head>
+
+<body>
+
+<h3>Tooltip for "simple tooltip" electoral map -- source code</h3>
+
+<p>
+This is the source code for the <a href="simpleTooltip.html">tooltip for "simple tooltip" electoral map</a> example
+</p>
+
+<script type="syntaxhighlighter" class="brush: js"><![CDATA[
+d3.helper = {};
+
+d3.helper.tooltip = function(accessor){
+    return function(selection){
+        var tooltipDiv;
+        var bodyNode = d3.select('body').node();
+        selection.on("mouseover", function(d, i){
+            // Clean up lost tooltips
+            d3.select('body').selectAll('div.tooltip').remove();
+            // Append tooltip
+            tooltipDiv = d3.select('body').append('div').attr('class', 'tooltip');
+            var absoluteMousePos = d3.mouse(bodyNode);
+            tooltipDiv.style('left', (absoluteMousePos[0] + 10)+'px')
+                .style('top', (absoluteMousePos[1] - 15)+'px')
+                .style('position', 'absolute') 
+                .style('z-index', 1001);
+            // Add text using the accessor function
+            var tooltipText = accessor(d, i) || '';
+            // Crop text arbitrarily
+            //tooltipDiv.style('width', function(d, i){return (tooltipText.length > 80) ? '300px' : null;})
+            //    .html(tooltipText);
+        })
+        .on('mousemove', function(d, i) {
+            // Move tooltip
+            var absoluteMousePos = d3.mouse(bodyNode);
+            tooltipDiv.style('left', (absoluteMousePos[0] + 10)+'px')
+                .style('top', (absoluteMousePos[1] - 15)+'px');
+            var tooltipText = accessor(d, i) || '';
+            tooltipDiv.html(tooltipText);
+        })
+        .on("mouseout", function(d, i){
+            // Remove tooltip
+            tooltipDiv.remove();
+        });
+
+    };
+};
+
+]]></script>
+<br/><br/><br/>
+</body>
+</html>
