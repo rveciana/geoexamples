@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<meta charset="utf-8">
+<style>
+
+.logo .verd1 {
+  fill: #1c390d;
+}
+
+.logo .verd2 {
+  fill: #738815;
+}
+
+@font-face {
+ font-family:book;
+ src: url("ANTQUAB.TTF"); /* TTF file for CSS3 browsers */
+}
+
+
+.logo text {
+  /*font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;*/
+  font-family: "book", serif;
+  
+  font-weight: bold;
+  fill: #738815;
+}
+
+.foreground {
+  fill: #fcf1c9;
+  stroke: #333;
+  stroke-width: 1.5px;
+}
+
+.land {
+  fill: #ca5934;
+  stroke: #766951;
+}
+
+</style>
+<body>
+<script src="http://d3js.org/d3.v3.min.js"></script>
+<script src="http://d3js.org/topojson.v0.min.js"></script>
+<script>
+
+var width = 500,
+    height = 500,
+    mapDiameter = 160;
+
+
+
+
+
+var svg = d3.select("body").append("svg")
+    .attr("width", width)
+    .attr("height", height)
+  .append("g")
+    .attr("transform", "translate(" + width / 2 + "," + height / 2 + ") rotate(-10, 0, 0)");
+
+var gradient = svg.append("defs").append("radialGradient")
+    .attr("id", "gradient")
+    .attr("cx", "75%")
+    .attr("cy", "25%");
+
+gradient.append("stop")
+    .attr("offset", "5%")
+    .attr("stop-color", "#142809");
+
+gradient.append("stop")
+    .attr("offset", "100%")
+    .attr("stop-color", "#2a5614");
+
+var gradient2 = svg.append("defs").append("radialGradient")
+    .attr("id", "gradient2")
+    .attr("cx", "75%")
+    .attr("cy", "25%");
+
+gradient2.append("stop")
+    .attr("offset", "5%")
+    .attr("stop-color", "#fcf1c9");
+
+gradient2.append("stop")
+    .attr("offset", "100%")
+    .attr("stop-color", "#d9d0ad");
+
+
+var logo = svg.append("g")
+    .attr("class", "logo");
+
+logo.append("path")
+    .style("fill", "url(#gradient)")
+    .attr("d", d3.svg.arc()
+    	.startAngle(0)
+    	.innerRadius(mapDiameter)
+    	.outerRadius(240)
+    	.endAngle(2*Math.PI));
+
+logo.append("path")
+    .attr("class", "verd2")
+    .attr("d", d3.svg.arc()
+    	.startAngle(0)
+    	.innerRadius(223)
+    	.outerRadius(230)
+    	.endAngle(2*Math.PI));
+
+logo.append("path")
+    .attr("class", "verd2")
+    .attr("d", d3.svg.arc()
+    	.startAngle(0)
+    	.innerRadius(mapDiameter)
+    	.outerRadius(163)
+    	.endAngle(2*Math.PI));
+
+logo.append("path")
+    .attr("id", "anellaInterior")
+    .attr("d", d3.svg.arc()
+    	.startAngle(0)
+    	.innerRadius(175)
+    	.outerRadius(175)
+    	.endAngle(2*Math.PI));
+
+logo.append("path")
+    .attr("id", "anellaExterior")
+    .attr("d", d3.svg.arc()
+    	.startAngle(Math.PI/2)
+    	.innerRadius(220)
+    	.outerRadius(220)
+    	.endAngle(3* Math.PI/2));
+
+logo.append("text")
+  .style("font-size","46px")
+  .append("textPath")
+  .attr("xlink:href","#anellaInterior")
+  .attr("startOffset",360)
+  .text("GEOINQUIETS")
+
+logo.append("text")
+  .style("font-size","25px")
+  .append("textPath")
+  .attr("xlink:href","#anellaExterior")
+  .attr("startOffset",950)
+  .text("amb l'ànima inquieta")
+
+var velocity = .005,
+    then = Date.now();
+
+var projection = d3.geo.orthographic()
+    .scale(mapDiameter)
+    .translate([0, 0])
+    .clipAngle(90);
+var path = d3.geo.path()
+    .projection(projection);
+
+var globe = {type: "Sphere"};
+
+var map = svg.append("g")
+    .attr("class", "map");
+
+map.append("path")
+    .datum(globe)
+    .style("fill", "url(#gradient2)")
+    .attr("d", path);
+
+d3.json("./world-110m.json", function(error, world) {
+ var land = topojson.object(world, world.objects.land),
+      globe = {type: "Sphere"};
+
+      map.insert("path")
+      .datum(topojson.object(world, world.objects.land))
+      .attr("class", "land")
+      .attr("d", path);
+
+    d3.timer(function() {
+    var angle = velocity * (Date.now() - then);
+    projection.rotate([angle,0,0]);
+    map.selectAll("path")
+      .attr("d", path.projection(projection));
+  });
+
+});
+</script>
