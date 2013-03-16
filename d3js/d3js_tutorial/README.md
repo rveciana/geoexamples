@@ -1,0 +1,1 @@
+This examples are from the D3 presentation I made for Geoinquiets
