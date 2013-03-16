@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<meta charset="utf-8">
+<style>
+
+.states {
+  fill: #ccc;
+  stroke: #fff;
+}
+
+.symbol {
+  fill: steelblue;
+  fill-opacity: .8;
+  stroke: #fff;
+}
+
+.tooltip{ background-color:rgba(68,136,187,0.5);;
+          margin: 10px;
+          height: 50px;
+          width: 150px;
+          padding-left: 10px; 
+          padding-top: 10px;
+    -webkit-border-radius:10px;
+    -moz-border-radius:10px;
+    border-radius:10px;
+        }
+</style>
+<body>
+<button type="button" id="change">Change</button>
+
+<script src="http://d3js.org/d3.v3.min.js"></script>
+<script src="http://d3js.org/topojson.v0.min.js"></script>
+<script src="http://d3js.org/queue.v1.min.js"></script>
+<script type="text/javascript" src="./tooltip.js"></script>
+
+
+<script>
+var width = 960,
+    height = 500;
+var states, points;
+
+
+var radius = d3.scale.sqrt()
+    .domain([0, 1e6])
+    .range([0, 10]);
+
+var projection = d3.geo.mercator()
+    .center([-97,37])
+    .scale(4000)
+    .translate([width / 2, height / 2]);
+
+
+var path = d3.geo.path()
+.projection(projection);
+
+var svg = d3.select("body").append("svg")
+    .attr("width", width)
+    .attr("height", height);
+
+queue()
+    .defer(d3.json, "./data/us.json")
+    .defer(d3.json, "./data/us-state-centroids.json")
+    .await(ready);
+
+
+function ready(error, us, centroid) {
+states = svg.append("path")
+      .attr("class", "states")
+      .datum(topojson.object(us, us.objects.states))
+      .attr("d", path);
+
+    points =  svg.selectAll(".symbol")
+      .data(centroid.features.sort(function(a, b) { return b.properties.population - a.properties.population; }))
+    .enter().append("path")
+      .attr("class", "symbol")
+      .attr("d", path.pointRadius(function(d) { if(d.properties) { return radius(d.properties.population);} else {return;} }))
+      .call(d3.helper.tooltip(
+        function(d, i){
+          return "<b>"+d.properties.name + "</b><br/>pop: "+d.properties.population;
+        }
+        ));
+};
+
+d3.select("#change").on("click", function() {
+  projection = d3.geo.albers();
+  path.projection(projection);
+  states.transition()
+      .duration(10000)
+      .attr("d", path);
+  points.transition()
+      .duration(3000)
+      .attr("d", path);
+});
+
+
+</script>
+
