@@ -41,9 +41,9 @@
 <script src="http://d3js.org/topojson.v0.min.js"></script>
 <script>
 
-var width = 430,
-    height = 430,
-    mapDiameter = 130;
+var width = 380,
+    height = 380,
+    mapDiameter = 110;
 
 
 
@@ -91,15 +91,15 @@ logo.append("path")
     .attr("d", d3.svg.arc()
     	.startAngle(0)
     	.innerRadius(mapDiameter)
-    	.outerRadius(mapDiameter + 80)
+    	.outerRadius(mapDiameter + 60)
     	.endAngle(2*Math.PI));
 
 logo.append("path")
     .attr("class", "verd2")
     .attr("d", d3.svg.arc()
     	.startAngle(0)
-    	.innerRadius(mapDiameter+ 63)
-    	.outerRadius(mapDiameter + 70)
+    	.innerRadius(mapDiameter+ 48)
+    	.outerRadius(mapDiameter + 55)
     	.endAngle(2*Math.PI));
 
 logo.append("path")
@@ -114,30 +114,30 @@ logo.append("path")
     .attr("id", "anellaInterior")
     .attr("d", d3.svg.arc()
     	.startAngle(0)
-    	.innerRadius(mapDiameter + 15)
-    	.outerRadius(mapDiameter + 15)
+    	.innerRadius(mapDiameter + 10)
+    	.outerRadius(mapDiameter + 10)
     	.endAngle(2*Math.PI));
 
 logo.append("path")
     .attr("id", "anellaExterior")
     .attr("d", d3.svg.arc()
     	.startAngle(Math.PI/2)
-    	.innerRadius(mapDiameter + 60)
-    	.outerRadius(mapDiameter + 60)
+    	.innerRadius(mapDiameter + 45)
+    	.outerRadius(mapDiameter + 45)
     	.endAngle(3* Math.PI/2));
 
 logo.append("text")
-  .style("font-size","46px")
+  .style("font-size","35px")
   .append("textPath")
   .attr("xlink:href","#anellaInterior")
-  .attr("startOffset",260)
+  .attr("startOffset",240)
   .text("GEOINQUIETS")
 
 logo.append("text")
-  .style("font-size","25px")
+  .style("font-size","21px")
   .append("textPath")
   .attr("xlink:href","#anellaExterior")
-  .attr("startOffset",770)
+  .attr("startOffset",620)
   .text("amb l'ànima inquieta")
 
 var velocity = .005,
