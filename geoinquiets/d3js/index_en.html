@@ -38,8 +38,8 @@
 			<div class="slides">
 
 				<section>
-					<h1>Mapes web vectorials</h1>
-					<h3>Sense <i>tiles</i>!</h3>
+					<h1>Vectorial web maps</h1>
+					<h3>No <i>tiles</i>!</h3>
 					<p>
 						<small><a href="http://geoexamples.blogspot.com">Roger Veciana</a></small>
 					</p>
@@ -48,21 +48,21 @@
 					<iframe src="./logo/index.html" width='520px' height='520px'></iframe>
 				</section>
 				<section>
-					<h3>Avantatges de treballar amb tiles</h3>
+					<h3>Benefits of working with tiles</h3>
 					<ul>
-						<li>Fàcil</li>
-						<li>Molts examples, stàndards, dades i llibreries</li>
-						<li>Capacitat de representar moltes dades</li>
-						<li>Pre-processament de les dades</li>
+						<li>Easy</li>
+						<li>Lots of examples, standards, data and libraries</li>
+						<li>Ability of representing huge amount of data</li>
+						<li>Data pre-process</li>
 					</ul>
 				</section>
 				<section>
-					<h3>Problemes de treballar amb tiles</h3>
+					<h3>Problems of working with tiles</h3>
 					<ul>
-						<li>Molt espai al servidor</li>
-						<li>Poca flexibilitat en les projeccions</li>
-						<li>Dificultats en la interactivitat</li>
-						<li>Integració més clàssica amb els altres elements de la web</li>
+						<li>Server load or space</li>
+						<li>Little flexibility in projections</li>
+						<li>Difficult interactivity</li>
+						<li>The integration with other parts of the web is more limited</li>
 					</ul>
 				</section>				
 				<section>
@@ -73,24 +73,24 @@
 					<section>
 					<h3>D3</h3>
 					<ul style="list-style-type:none;">
-						<li>Orientat a la representació de dades</li>
-						<li>Basat en la manipulació del <i>DOM</i> dels documents</li>
-						<li>Costa entendre què és sense <a href="#" class="navigate-down">veure'n exemples &#x25BC;</a></li>
+						<li>Data representation oriented</li>
+						<li>Based in the documents <i>DOM</i> manipulation</li>
+						<li>Difficult to understand without <a href="#" class="navigate-down">seeing some examples &#x25BC;</a></li>
 					</ul>
 				    </section>
 				    <section>
-						<p>Gràfiques senzilles...</p>
+						<p>Simple graphs...</p>
 						<a href="http://bl.ocks.org/mbostock/3887235" target="_blank"><img src="img/d3Exemplepie.png"/></a>
 						<p><a href="#" class="navigate-down">&#x25BC;</a><p>
 					</section>
 					<section>
-						<p>...o complexes</p>
+						<p>...or complex graphs</p>
 						<p><i>Wealth & Health of nations</i></p>
 						<a href="http://bost.ocks.org/mike/nations/" target="_blank"><img src="img/d3Exemplegrafica.png"/></a>
 						<p><a href="#" class="navigate-down">&#x25BC;</a><p>
 					</section>
 					<section>
-						<p>mapes interactius</p>
+						<p>Interactive maps</p>
 						<a href="http://mbostock.github.com/d3/talk/20111018/force-states.html" target="_blank"><img src="img/d3Exemplepoligons.png"/></a>
 						<p><a href="#" class="navigate-right">&#x25BA;</a><p>
 					</section>
@@ -98,38 +98,38 @@
 				<section>
 					<h3>D3</h3>
 					<ul style="list-style-type:none;">
-						<li><img src="img/v.svg" width="30px"/>Software lliure</li>
+						<li><img src="img/v.svg" width="30px"/>Free software</li>
 						<li><img src="img/v.svg" width="30px"/><img src="img/x.svg" width="30px"/>HTML5 / CSS3</li>
-						<li><img src="img/v.svg" width="30px"/>Flexibilitat absoluta</li>
+						<li><img src="img/v.svg" width="30px"/>Absolut flexibility</li>
 					</ul>
 				</section>
 				<section>
 					<h3>D3</h3>
 					<ul style="list-style-type:none;">
-						<li><img src="img/x.svg" width="30px"/>Poca documentació</li>
-						<li><img src="img/v.svg" width="30px"/>Milers d'exemples</li>
-						<li><img src="img/x.svg" width="30px"/>Corba d'aprentatge relativament relativament pronunciada</li>
+						<li><img src="img/x.svg" width="30px"/>Little documentation</li>
+						<li><img src="img/v.svg" width="30px"/>Tons of examples</li>
+						<li><img src="img/x.svg" width="30px"/>Quite steep learning curve</li>
 					</ul>
 				</section>
 				<section>
-					<h3>D3 - Com funciona</h3>
-					<p>Manipulació de nodes DOM:</p>
+					<h3>D3 - How does it work</h3>
+					<p>Dom nodes manipulation:</p>
 					<pre>
 						<code>d3.select("body").append("div").text("Geoinquiets");</code>
 					</pre>
 				</section>
 				<section>
-					<h3>D3 - Com funciona</h3>
-					<p>Encadenament de mètodes:</p>
+					<h3>D3 - How does it work</h3>
+					<p>Method chaining:</p>
 					<pre>
 						<code>d3.select("body")
-							.append("div")
-							.style('position', 'absolute')
-							.text("Geoinquiets");</code>
+	.append("div")
+	.style('position', 'absolute')
+	.text("Geoinquiets");</code>
 					</pre>
 				</section>	
 				<section>
-					<h3>D3 - Com funciona</h3>
+					<h3>D3 - How does it work</h3>
 					<p>data():</p>
 					<pre>
 						<code>var llocsTrobades = ['Centro Galego','Casa Orlandai','CanteraTech'];
@@ -146,16 +146,16 @@ d3.select("body")
 					</pre>
 				</section>	
 				<section>
-					<h3>D3 - què ofereix</h3>
+					<h3>D3 - what else does it offer</h3>
 					<ul>
-						<li>Càlcul d'escales i temps</li>
-						<li>Manipulació d'SVG/Canvas</li>
+						<li>Scale and time calculation</li>
+						<li>SVG/Canvas manipulation</li>
 						<li><i>events</i></li>
-						<li>transicions</li>
+						<li>transitions</li>
 					</ul>
 				</section>
 				<section>
-					<h3>D3 - què ofereix</h3>
+					<h3>D3 - what else does it offer</h3>
 					<h4>Layouts</h4>
 					<img src="img/d3BundleLayout.png"/>
 					<img src="img/d3PackLayout.png"/>
@@ -163,127 +163,127 @@ d3.select("body")
 					<img src="img/d3PartitionLayout.png"/>
 				</section>	
 				<section>
-					<h3>D3 - què ofereix</h3>
-					<p>Mapes</p>
+					<h3>D3 - what else does it offer</h3>
+					<p>Maps</p>
 					<p><img src="img/bolaMon.png"/></p>
 					<ul>
-						<li>unes vint projeccions</li>
-						<li>GeoJSON i TopoJSON</li>
+						<li>up to twenty projections</li>
+						<li>GeoJSON and TopoJSON</li>
 					</ul>
 				</section>					
 				<section>
-					<h3>D3 - què ofereix</h3>
+					<h3>D3 - what else does it offer</h3>
 					<h4>TopoJSON</h4>
 					<ul style="list-style-type:none;">
-						<li><img src="img/v.svg" width="30px"/>Codifica topologia enlloc de geometries</li>
-						<li><img src="img/v.svg" width="30px"/>Redueix la mida fins al 80%</li>
-						<li><img src="img/v.svg" width="30px"/>Permet simplificacions de polígons sense problemes a les fornteres</li>
-						<li><img src="img/x.svg" width="30px"/>Format propi</li>
+						<li><img src="img/v.svg" width="30px"/>Codifies topologies instead of gemoetries</li>
+						<li><img src="img/v.svg" width="30px"/>Reduces the size up to a 80%</li>
+						<li><img src="img/v.svg" width="30px"/>Allows polygon simplification without problems at the borders</li>
+						<li><img src="img/x.svg" width="30px"/><i>proprietary</i> format</li>
 				    </ul>
     			
 				</section>
 				<section>
-					<h3>D3 - Mapes</h3>
+					<h3>D3 - Maps</h3>
 					<ul>
-						<li><a href="http://www.jasondavies.com/maps/transition" target="_blank">Transicions</a></li>
-						<li><a href="http://rveciana.github.com/geoexamples/d3js/d3js_electoral_map/pieChartTooltip.html" target="_blank">Interacció amb les geometries</a></li>
-						<li><a href="http://bl.ocks.org/dwtkns/raw/4686432/" target="_blank">Interacció amb les projeccions</a></li>
+						<li><a href="http://www.jasondavies.com/maps/transition" target="_blank">Transitions</a></li>
+						<li><a href="http://rveciana.github.com/geoexamples/d3js/d3js_electoral_map/pieChartTooltip.html" target="_blank">Interaction with the geometries</a></li>
+						<li><a href="http://bl.ocks.org/dwtkns/raw/4686432/" target="_blank">Interaction with the projections</a></li>
 					</ul>
 				</section>
 				<section>
-					<h3>D3 - I si volem ràsters?</h3>
+					<h3>D3 - If we want raster anyway?</h3>
 					<ul>
-						<li><a href="http://bl.ocks.org/dwtkns/raw/4710879/" target="_blank">D3 incorpora el mòdul d3.geo.tile...</a></li>
-						<li><a href="http://bl.ocks.org/mbostock/raw/4150951/" target="_blank">... que es pot combinar amb les funcions vectorials!</a></li>
-						<li><a href="http://bost.ocks.org/mike/leaflet/" target="_blank">També es pot combinar amb Leaflet</a></li>
+						<li><a href="http://bl.ocks.org/dwtkns/raw/4710879/" target="_blank">D3 includes the d3.geo.tile module...</a></li>
+						<li><a href="http://bl.ocks.org/mbostock/raw/4150951/" target="_blank">... which can be combined with the vectorial functions!</a></li>
+						<li><a href="http://bost.ocks.org/mike/leaflet/" target="_blank">Can be used with Leaflet too</a></li>
 				    </ul>
 				</section>
 				<section>
-					<h3>D3 - falta millorar</h3>
+					<h3>D3 - needs to improve</h3>
 					<ul>
-						<li>Documentació/tutorials</li>
-						<li>Etiquetes</li>
-						<li>Estils</li>
-						<li>Té moltes més possibilitats</li>
+						<li>Documentation/tutorials</li>
+						<li>Map labeling</li>
+						<li>Map styles</li>
+						<li>It's got lots of unexplored possibilities</li>
 					</ul>
 				</section>
 				<section>
 					<h3>Kartograph</h3>
 					<ul style="list-style-type:none;">
-						<li><img src="img/v.svg" width="30px"/>Orientat a mapes</li>
-						<li><img src="img/v.svg" width="30px"/>Maneja estils amb facilitat</li>
-						<li><img src="img/v.svg" width="30px"/>Bona corba d'aprenentatge</li>
-						<li><img src="img/v.svg" width="30px"/><img src="img/x.svg" width="30px"/>Alt nivell</li>
-						<li><img src="img/x.svg" width="30px"/>Bugs / Menys comunitat</li>
+						<li><img src="img/v.svg" width="30px"/>Map oriented</li>
+						<li><img src="img/v.svg" width="30px"/>Easy styling</li>
+						<li><img src="img/v.svg" width="30px"/>Good learning curve</li>
+						<li><img src="img/v.svg" width="30px"/><img src="img/x.svg" width="30px"/>Works at high level</li>
+						<li><img src="img/x.svg" width="30px"/>Buggy / smaller comunity</li>
 					</ul>
 				</section>
 				<section>
 					<h3>Kartograph</h3>
-					<ul><li>Format de dues parts
+					<ul><li>Made of two parts
 						<ol>
 						    <li>Kartograph.py</li>
 						    <li>Kartograph.js</li>
 					    </ol>
 					</li>
-					<li><a href="http://kartograph.org/showcase/italia/">Molt bon resultats</a></li>
+					<li><a href="http://kartograph.org/showcase/italia/" target="_blank">Awesome results</a></li>
 					</ul>
 				</section>
 				<section>
 					<section>
-					<h3>Creant un mapa amb D3 pas a pas</h3>
+					<h3>A D3 map, step by step</h3>
 				    </section>
 				    <section>
-				    <h3>Creem un mapa bàsic</h3>
+				    <h3>A basic map</h3>
 				    <img src="img/thumbnail_basic.png"/>
 				    <br/>
 				    <ul>
 				    	<li><i>Includes</i></li>
-				    	<li>Path i SVG</li>
-				    	<li>Càrrega del JSON</li>
-				    	<li>Dibuix del mapa</li>
+				    	<li>Path and SVG</li>
+				    	<li>JSON loading</li>
+				    	<li>Map drawing</li>
 				    </ul>
 				    <br/>
 					<a href="http://bl.ocks.org/rveciana/5181013" target="_blank">
-						Veure l'exemple
+						See the example
 					</a>
 				    </section>
 				    <section>
-				    	<h3>Definim la projecció</h3>
+				    	<h3>Defining the projection</h3>
 				    	<img src="img/thumbnail_projection.png"/>
 				    	<br/>
 				    <ul>
-				    	<li>Albers USA / <a href="https://github.com/mbostock/d3/wiki/Geo-Projections" target="_blank">Altres</a></li>
+				    	<li>Albers USA / <a href="https://github.com/mbostock/d3/wiki/Geo-Projections" target="_blank">Others</a></li>
 				    </ul>
 				    <br/>
 				    <a href="http://bl.ocks.org/rveciana/5181022" target="_blank">
-						Veure l'exemple
+						See the example
 					</a>
 				    </section>
 				    <section>
-				    	<h3>Hi afegim una transició</h3>
+				    	<h3>Adding a transition</h3>
 				    	<img src="img/thumbnail_transition.png"/>
 				    	<br/>
 				    	<ul>
 				    		<li><i>Events</i></li>
-				    		<li>transicions</li>
+				    		<li>transitions</li>
 				    	</ul>
 				    	<br/>
 				    <a href="http://bl.ocks.org/rveciana/5181026" target="_blank">
-						Veure l'exemple
+						See the example
 					</a>
 				    </section>
 				    <section>
-				    	<h3>Afegim simbols</h3>
+				    	<h3>Adding symbols</h3>
 				    	<img src="img/thumbnail_symbols.png"/>
 				    	<br/>
 				    	<ul>
-				    		<li><i>Queue</i> per carregar més d'un arxiu</li>
-				    		<li>Radi i ordre com a funcions</li>
-				    		<li>Canvis en la transició</li>
+				    		<li>Using <i>queue</i> to load more than one file</li>
+				    		<li>Radius and order as functions</li>
+				    		<li>Changes in the transition</li>
 				    	</ul>
 				    	<br/>
 				    <a href="http://bl.ocks.org/rveciana/5181095" target="_blank">
-						Veure l'exemple
+						See the example
 					</a>
 				    </section>
 				    <section>
@@ -291,27 +291,31 @@ d3.select("body")
 						<img src="img/thumbnail_tooltips.png"/>
 				    	<br/>
 				    	<ul>
-				    		<li>Afegint funcions externes</li>
-				    		<li>Estil</li>
+				    		<li>Adding external functions</li>
+				    		<li>Style</li>
 				    	</ul>
 				    	<br/>
 				    <a href="http://bl.ocks.org/rveciana/5181105" target="_blank">
-						Veure l'exemple
+						See the example
 					</a>
 					</section>
 					<section>
-						<h3>El logo de Geoinquiets</h3>
-						<iframe src="./logo/index.html" width='520px' height='520px'></iframe><br/>
+						<h3><i>Geoinquiets</i> animated logo</h3>
+						<iframe src="./logo/index.html" width='450px' height='450px'></iframe><br/>
 						<ul>
-							<li>Barreja d'elements SVG</li>
-							<li>Traslació de l'origen de la projecció</li>
+							<li>Mixing SVG elements</li>
+							<li>Origin of the projection translation</li>
 						</ul>
+						<br/>
+						<a href="http://bl.ocks.org/rveciana/5181331" target="_blank">
+						Veure l'exemple
+					    </a>
 						<p><a href="#" class="navigate-right">&#x25BA;</a><p>
 					</section>
 				</section>
 				<section>
-					<h3>Gràcies per l'atenció</h3>
-					Més exemples a <a href="http://geoexamples.blogspot.com"><i>Geoexamples</i></a> i <a href="http://bl.ocks.org/rveciana">bl.ocks.org</a>
+					<h3>Thanks fot the attention</h3>
+					More examples at <a href="http://geoexamples.blogspot.com"><i>Geoexamples</i></a> and <a href="http://bl.ocks.org/rveciana">bl.ocks.org</a>
 				</section>
 			</div>
 
