@@ -45,7 +45,7 @@ var radius = d3.scale.sqrt()
 
 var projection = d3.geo.mercator()
     .center([-97,37])
-    .scale(4000)
+    .scale(4000 / 2 / Math.PI)
     .translate([width / 2, height / 2]);
 
 

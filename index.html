@@ -83,7 +83,32 @@
                 </div>
 
 
-<!-- -->
+<!-- Kartograph End -->
+
+<!-- Geoinquiets -->
+                <div data-dojo-type="dijit/PopupMenuBarItem">
+                <span>Geoinquiets</span>
+                <div data-dojo-type="dijit/DropDownMenu" id="GeoinquietsMenu">
+                  <div data-dojo-type="dijit/PopupMenuItem">
+                     <span>Presentation 1/Mar/2013</span>
+                     <div data-dojo-type="dijit/DropDownMenu">
+                         <div data-dojo-type="dijit/MenuItem" data-dojo-props="onClick:function(){window.open('geoinquiets/d3js');}">Slides Catalan</div>
+                         <div data-dojo-type="dijit/MenuItem" data-dojo-props="onClick:function(){window.open('geoinquiets/d3js/index_en.html');}">Slides English</div>
+                         <div data-dojo-type="dijit/MenuItem" data-dojo-props="onClick:function(){dijit.byId('contentPane').set('content', dojo.create('iframe', {'src': 'd3js/d3js_tutorial/basic.html','style': 'border: 0; width: 100%; height: 100%'}))}">Basic map</div>
+                        <div data-dojo-type="dijit/MenuItem" data-dojo-props="onClick:function(){dijit.byId('contentPane').set('content', dojo.create('iframe', {'src': 'd3js/d3js_tutorial/projection.html','style': 'border: 0; width: 100%; height: 100%'}))}">Adding projection</div>
+                        <div data-dojo-type="dijit/MenuItem" data-dojo-props="onClick:function(){dijit.byId('contentPane').set('content', dojo.create('iframe', {'src': 'd3js/d3js_tutorial/projectiontransition.html','style': 'border: 0; width: 100%; height: 100%'}))}">Adding transition</div>
+                        <div data-dojo-type="dijit/MenuItem" data-dojo-props="onClick:function(){dijit.byId('contentPane').set('content', dojo.create('iframe', {'src': 'd3js/d3js_tutorial/points.html','style': 'border: 0; width: 100%; height: 100%'}))}">Adding points</div>
+                        <div data-dojo-type="dijit/MenuItem" data-dojo-props="onClick:function(){dijit.byId('contentPane').set('content', dojo.create('iframe', {'src': 'd3js/d3js_tutorial/pointstooltip.html','style': 'border: 0; width: 100%; height: 100%'}))}">Adding tooltips</div>
+                        <div data-dojo-type="dijit/MenuItem" data-dojo-props="onClick:function(){dijit.byId('contentPane').set('content', dojo.create('iframe', {'src': 'http://bl.ocks.org/rveciana/raw/5181095','style': 'border: 0; width: 100%; height: 100%'}))}">Adding tooltips</div>
+
+                     </div>
+                  </div>
+
+                  
+                    
+                </div>
+                </div>
+                <!-- Geoinquiets end -->
             </div>
          </div>
         <div id="contentPane" data-dojo-type="dijit/layout/ContentPane" data-dojo-props="splitter:true, region:'center'" style="background-color:rgba(255,255,255,0);"></div>
