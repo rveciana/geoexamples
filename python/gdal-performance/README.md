@@ -5,3 +5,5 @@ The files are:
 * classification_numpy_arrays.py: The raster is classified using NumPy arrays
 * classification_blocks.py: In addition to using NumPy arrays, the raster is read using blocks to improve the performance and be able to read *really big* files
 * classification_blocks_minmx.py: A filter is used, so the classification values out of the raster range are not evaluated so the performance is improved.
+
+Be sure to change the *in_file* variable
