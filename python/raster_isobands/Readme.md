@@ -7,7 +7,9 @@ There are two scripts, that are used exacly the same and produce the same result
  * isobands\_matplotlib.py: The code is cleaner and fast, but requires matplotlib installed, which is not always possible
  * isobands\_gdal.py: Requires only GDAL python installed, but the code is dirtier.
 
-    Usage: isobands\_matplotlib.py [-h] [-b band] [-off offset] [-i interval]
+
+```
+    Usage: isobands_matplotlib.py [-h] [-b band] [-off offset] [-i interval]
     [-nln layer_name] [-a attr_name] [-f formatname]
     src_file out_file
     Calculates the isobands from a raster into a vector file
@@ -23,7 +25,6 @@ There are two scripts, that are used exacly the same and produce the same result
       -nln layer_name  The out layer name (default bands)
       -a attr_name     The out layer attribute name (default h)
       -f formatname    The output file format name (default ESRI Shapefile)
+```
 
-
-    
-
+You can get more information at this [GeoExamples blog entry](http://geoexamples.blogspot.com/2013/08/creating-vectorial-isobands-with-python.html)
