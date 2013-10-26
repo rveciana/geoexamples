@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<meta charset="utf-8">
+<title>Number of establishments, bedrooms and bed-places - NUTS 3 regions</title>
+<style>
+
+.background {
+  fill: #fff;
+  stroke: #ccc;
+}
+
+.tooltip{ background-color:rgba(200,200,200,0.5);;
+          margin: 10px;
+          height: 90px;
+          width: 150px;
+          padding-left: 10px; 
+          padding-top: 10px;
+    -webkit-border-radius:10px;
+    -moz-border-radius:10px;
+    border-radius:10px;
+        }
+</style>
+<body>
+<h2>Number of establishments, bedrooms and bed-places - NUTS 3 regions</h2>
+<div id="map"></div>
+<script src="http://d3js.org/d3.v3.min.js"></script>
+<script src="http://d3js.org/topojson.v1.min.js"></script>
+<script type="text/javascript" src="./tooltip.js"></script>
+<script type="text/javascript" src="./legend.js"></script>
+<script>
+var width = 600,  
+    height = 600;  
+  
+var projection = d3.geo.stereographic()  
+    .center([3.9,43.0])  
+    .scale(1000)  
+    .translate([width / 4 , height / 2]); 
+
+var path = d3.geo.path()  
+    .projection(projection);
+
+var svg = d3.select("#map").append("svg")
+    .attr("width", 960)
+    .attr("height", 500);
+
+var domain = [0,30]
+var color = d3.scale.linear().domain(domain).range(['blue', 'red']);
+
+d3.csv("tour_cap_nuts3_1_Data.csv", function(stats) {
+  data = {};
+  stats.forEach(function(d) {
+    if (d.TIME == 2010){
+      data[d.GEO] = d.Value.replace(",",""); //Thousands is a comma!
+    }
+  });
+
+d3.json("/rveciana/raw/5919944/regions.json", function(error, europe) {
+	svg.selectAll(".region")
+	.data(topojson.feature(europe, europe.objects.regions).features)
+  .enter()
+    .append("path")
+    .filter(function(d) { return !isNaN(parseFloat(data[d.properties.NUTS_ID])); }) 
+      .attr("class", "region")
+      .attr("d", path)
+      .style("stroke", "#999")
+      .style("stroke-width", 0.2)
+      .style("fill", function(d) {
+        if (!isNaN(parseFloat(data[d.properties.NUTS_ID])))
+
+          return color(10000*data[d.properties.NUTS_ID]/d.properties.POPULATION);
+        else
+          return "#999";
+      })
+      .style("opacity", function(d){
+        if (!isNaN(parseFloat(data[d.properties.NUTS_ID])))
+          return 1;
+        else
+          return 0;
+      })
+      
+      .call(d3.helper.tooltip(function(d, i){return tooltipText(d);}));
+
+
+    function tooltipText(d){
+           if (isNaN(parseFloat(data[d.properties.NUTS_ID]))) {
+            var beds = "No Data";
+           } else {
+            var beds = data[d.properties.NUTS_ID];
+           }
+           return "<b>" + d.properties.NAME + "</b>"
+                  + "<br/> pop: " + d.properties.POPULATION 
+                  + "<br/> beds: " + beds;
+      }
+    svg.call(legend({width:300, posx: 100, posy:400, elements: 16, domain: domain, title:"Number of establishments / 10000 inhabitants"}));
+});
+});
+</script>
+
+
+<footer>Source: <a href="http://epp.eurostat.ec.europa.eu/portal/page/portal/crime/data/database">eurostat</a></footer>
