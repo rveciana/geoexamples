@@ -1,0 +1,317 @@
+<!DOCTYPE html>
+<meta charset="utf-8">
+<title>La Belle France</title>
+<style>
+h2 {
+  text-align: center;
+  font-family: "AquilineTwoRegular";
+  font-size: 30px;
+}
+#map {
+  text-align: center;
+}
+svg .graticule {
+  fill: #fcfcfc;
+  stroke-width: 0.2;
+  stroke: #777;
+}
+
+svg .bg, svg .bgback {
+  stroke: none;
+  fill: #fff;
+  fill-opacity: 1;
+}
+
+
+svg .country {
+  stroke: #D1BEB0;
+  stroke-opacity: .3;
+  fill: #D1BEB0;
+  fill-opacity: .23;
+  }
+
+svg .region:hover {
+  fill: #eda;
+  fill-opacity: .37;
+}
+
+svg .region {
+  stroke: #baa;
+  stroke-opacity: 1;
+  stroke-dasharray: 3,5;
+  fill: #fff;
+  fill-opacity: .8;
+  }
+
+svg .ferry_path {
+  fill: none;
+  stroke-opacity: .5;
+  stroke-dasharray: 3,4;
+}
+@font-face {
+    font-family: 'AquilineTwoRegular';
+    src: url('AquilineTwo-webfont.eot');
+    src: url('AquilineTwo-webfont.eot?#iefix') format('embedded-opentype'),
+         url('AquilineTwo-webfont.woff') format('woff'),
+         url('AquilineTwo-webfont.ttf') format('truetype'),
+         url('AquilineTwo-webfont.svg#AquilineTwoRegular') format('svg');
+    font-weight: normal;
+    font-style: normal;
+
+}
+
+</style>
+<body>
+<h2>La Belle France</h2>
+<div id="map"></div>
+<script src="http://d3js.org/d3.v3.min.js"></script>
+<script src="http://d3js.org/d3.geo.projection.v0.min.js"></script>
+<script src="http://d3js.org/topojson.v1.min.js"></script>
+
+<script>
+var cities = [ 
+                {'pos': [2.351, 48.857], 'name': 'Paris'},
+                {'pos':[5.381, 43.293], 'name': 'Marseille'},
+                {'pos':[3.878, 43.609], 'name': 'Montpellier'},
+                {'pos':[4.856, 45.756], 'name': 'Lyon'}, 
+                {'pos':[1.436, 43.602], 'name': 'Toulouse'},
+                {'pos':[-0.566, 44.841], 'name': 'Bordeaux'},
+                {'pos':[-1.553, 47.212], 'name': 'Nantes'},
+                {'pos':[8.737, 41.925], 'name': 'Ajaccio'},
+              ];
+var countries = [
+                {'pos': [-3, 41.92], 'name': 'Espagne'},
+                {'pos': [3.56, 50.72], 'name': 'Belgique'},
+                {'pos': [-3, 52.05], 'name': 'Royaume-Uni'},
+                {'pos': [8.5, 50], 'name': 'Allemagne'},
+                {'pos': [7.5, 46.9], 'name': 'Suisse'},
+                {'pos': [9.5, 45], 'name': 'Italie'},
+                {'pos': [9.95, 47.16], 'name': 'Autriche'},
+                {'pos': [3.91, 51.71], 'name': 'Hollande'},
+                ];
+var ferry_path = [[8.745, 41.908],
+                  [8.308, 41.453],
+                  [5.559, 43.043], 
+                  [5.268, 43.187], 
+                  [5.306, 43.289]
+                  ];
+var width = 850,  
+    height = 750; 
+
+
+var projection = d3.geo.orthographic()
+    .scale(3500)
+    .translate([width / 2, height / 2])
+    .rotate([-3, -46.5, 5])
+    .clipAngle(90)
+    .precision(.1);
+
+var graticule = d3.geo.graticule()
+    .extent([[-17, 27], [30 + 1e-6, 57 + 1e-6]])
+    .step([3, 3]);
+
+var path = d3.geo.path()  
+    .projection(projection);
+
+
+
+var svg = d3.select("#map").append("svg")
+    .attr("width", width)
+    .attr("height", height);
+var defs = svg.append("defs");
+var oglow = defs.append("filter")
+  .attr("id","oglow");
+  oglow.append("feColorMatrix")
+    .attr("in","SourceGraphic")
+    .attr("type", "matrix")
+    .attr("values", "0 0 0 0 0   0 0 0 0 0   0 0 0 0 0   0 0 0 1 0")
+    .attr("result","mask");
+  oglow.append("feMorphology")
+    .attr("in","mask")
+    .attr("radius","1")
+    .attr("operator","dilate")
+    .attr("result","mask");
+  oglow.append("feColorMatrix")
+    .attr("in","mask")
+    .attr("type", "matrix")
+    .attr("values", "0 0 0 0 0.6 0 0 0 0 0.5333333333333333 0 0 0 0 0.5333333333333333  0 0 0 1 0")
+    .attr("result","r0");
+  oglow.append("feGaussianBlur")
+    .attr("in","r0")
+    .attr("stdDeviation","4")
+    .attr("result","r1");
+  oglow.append("feComposite")
+    .attr("operator","out")
+    .attr("in","r1")
+    .attr("in2","mask")
+    .attr("result","comp");
+  var frMerge = oglow.append("feMerge");
+  frMerge.append("feMergeNode")
+    .attr("in","SourceGraphic");
+  frMerge.append("feMergeNode")
+    .attr("in","r1");
+
+var myglow = defs.append("filter")
+  .attr("id","myglow");
+myglow.append("feColorMatrix")
+    .attr("in","SourceGraphic")
+    .attr("type", "matrix")
+    .attr("values", "0 0 0 0 0   0 0 0 0 0   0 0 0 0 0   0 0 0 500 0")
+    .attr("result","mask");
+myglow.append("feMorphology")
+    .attr("in","mask")
+    .attr("radius","1")
+    .attr("operator","erode")
+    .attr("result","r1");
+myglow.append("feGaussianBlur")
+    .attr("in","r1")
+    .attr("stdDeviation","4")
+    .attr("result","r2");
+myglow.append("feColorMatrix")
+    .attr("in","r2")
+    .attr("type", "matrix")
+    .attr("values", "1 0 0 0 0.5803921568627451 0 1 0 0 0.3607843137254902 0 0 1 0 0.10588235294117647 0 0 0 -1 1")
+    .attr("result","r3");
+myglow.append("feComposite")
+    .attr("operator","in")
+    .attr("in","r3")
+    .attr("in2","mask")
+    .attr("result","comp");
+var frMerge = myglow.append("feMerge");
+  frMerge.append("feMergeNode")
+    .attr("in","SourceGraphic");
+  frMerge.append("feMergeNode")
+    .attr("in","comp");
+
+svg.append("path")
+    .datum(graticule)
+    .attr("class", "graticule")
+    .attr("d", path);
+
+d3.json("data.json", function(error, data) {
+    svg.selectAll(".bgback")
+    .data(topojson.feature(data, data.objects.land).features)
+  .enter()
+    .append("path")
+      .attr("class", "bgback")
+      .attr("d", path)
+      .style("filter","url(#oglow)")
+      .style("stroke", "#999")
+      .style("stroke-width", 0.2);
+
+  svg.selectAll(".bg")
+    .data(topojson.feature(data, data.objects.land).features)
+  .enter()
+    .append("path")
+      .attr("class", "bg")
+      .attr("d", path)
+      .style("filter","url(#myglow)")
+      .style("stroke", "#999")
+      .style("stroke-width", 0.2);
+
+    
+    svg.selectAll(".country")
+    .data(topojson.feature(data, data.objects.countries).features)
+  .enter()
+    .append("path")
+      .attr("class", "country")
+      .attr("d", path)
+      .style("stroke", "#999")
+      .style("stroke-width", 0.2);
+
+  svg.selectAll(".region")
+    .data(topojson.feature(data, data.objects.regions).features)
+  .enter()
+    .append("path")
+      .attr("class", "region")
+      .attr("d", path)
+      .style("stroke", "#999")
+      .style("stroke-width", 0.2);
+
+  var city_labels =svg.selectAll(".city_label")
+    .data(cities)
+    .enter();
+
+  city_labels
+    .append("text")
+    .attr("class", "city_label")
+    .text(function(d){return d.name;})
+    .attr("font-family", "AquilineTwoRegular")
+    .attr("font-size", "20px")
+    .attr("fill", "#544")
+    .attr("x",function(d){return projection(d.pos)[0];})
+    .attr("y",function(d){return projection(d.pos)[1];});
+
+
+  city_labels
+    .append("circle")
+    .attr("r", 3)
+    .attr("fill", "black")
+    .attr("cx",function(d){return projection(d.pos)[0];})
+    .attr("cy",function(d){return projection(d.pos)[1];});
+
+  svg.selectAll(".country_label")
+    .data(countries)
+    .enter()
+    .append("text")
+    .attr("class", "country_label")
+    .text(function(d){return d.name;})
+    .attr("font-family", "AquilineTwoRegular")
+    .attr("font-size", "22px")
+    .attr("fill", "#511")
+    .attr("fill-opacity", ".35")
+    .attr("x",function(d){return projection(d.pos)[0];})
+    .attr("y",function(d){return projection(d.pos)[1];});
+ 
+  var shipPathLine = d3.svg.line()
+    .interpolate("cardinal")
+    .x(function(d) { return projection(d)[0]; })
+    .y(function(d) { return projection(d)[1]; });
+
+  var shipPath = svg.append("path")
+    .attr("d",shipPathLine(ferry_path))
+    .attr("stroke","#000")
+    .attr("class","ferry_path");
+ 
+
+  var shipPathEl = shipPath.node();
+  var shipPathElLen = shipPathEl.getTotalLength();
+
+  var pt = shipPathEl.getPointAtLength(0);
+  var shipIcon = svg.append("image")
+          .attr("xlink:href","ship.png")
+          .attr("x", pt.x - 10)
+          .attr("y", pt.y - 5.5)
+          .attr("width", 15)
+          .attr("height", 8);
+
+  var i = 0;
+  var delta = 0.05;
+  var dist_ease = 0.2;
+  var delta_ease = 0.9;
+  setInterval(function(){
+    
+    pt = shipPathEl.getPointAtLength(i*shipPathElLen);
+    shipIcon
+      .transition()
+      .ease("linear")
+      .duration(1000)
+      .attr("x", pt.x - 10)
+      .attr("y", pt.y - 5.5);
+    
+    //i = i + delta;
+
+    if (i < dist_ease){
+      i = i + delta * ((1-delta_ease) + i*delta_ease/dist_ease);
+    }else if (i > 1 - dist_ease){
+      i = i + delta * (1 - ((i - (1 - dist_ease)) * (delta_ease/dist_ease)));
+    }else{
+      i = i + delta;
+    }
+    if (i+0.0001 >= 1 || i-0.0001 <= 0)
+      delta = -1 * delta;
+  },1000);
+   
+});
+
+</script>
