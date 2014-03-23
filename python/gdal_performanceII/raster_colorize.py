@@ -176,10 +176,5 @@ if __name__ == "__main__":
 
     if len(argv) == 1 or file_name == None or colorfile_name == None or out_file_name == None: 
        Usage()     
-    '''
-    try:
-        raster2png(file_name,colorfile_name,out_file_name,band,discrete)
-    except Exception, ex:
-        print "Error: " + str(ex)
-    '''
+
     raster2png(file_name,colorfile_name,out_file_name,band,discrete)
