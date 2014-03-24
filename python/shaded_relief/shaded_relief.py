@@ -123,8 +123,7 @@ def hillshade(array, azimuth, angle_altitude):
     This function calculates the value of the hillshade array, 
     given an altitudes array, an azimuth and an altitude angle
     '''
-    azimuth = 360.0 - azimuth 
-    
+        
     x, y = gradient(array)
     slope = pi/2. - arctan(sqrt(x*x + y*y))
     aspect = arctan2(-x, y)
@@ -134,7 +133,7 @@ def hillshade(array, azimuth, angle_altitude):
  
     shaded = sin(altituderad) * sin(slope)\
      + cos(altituderad) * cos(slope)\
-     * cos((azimuthrad - pi/2.) - aspect)
+     * cos(azimuthrad - aspect)
     return 255*(shaded + 1)/2
 
 def values2rgba(array, color_table, classification_values, max_value, min_value):

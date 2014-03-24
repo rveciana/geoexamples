@@ -14,8 +14,7 @@ from numpy import zeros
 from numpy import uint8
 import matplotlib.pyplot as plt
 
-def hillshade(array, azimuth, angle_altitude):
-    azimuth = 360.0 - azimuth 
+def hillshade(array, azimuth, angle_altitude): 
     
     x, y = gradient(array)
     slope = pi/2. - arctan(sqrt(x*x + y*y))
@@ -26,7 +25,7 @@ def hillshade(array, azimuth, angle_altitude):
  
     shaded = sin(altituderad) * sin(slope)\
      + cos(altituderad) * cos(slope)\
-     * cos((azimuthrad - pi/2.) - aspect)
+     * cos(azimuthrad - aspect)
     return 255*(shaded + 1)/2
 
 ds = gdal.Open('w001001.tiff')  
