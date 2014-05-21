@@ -26,9 +26,9 @@ values_list_b = []
 r = zeros((ysize, xsize), numpy.float)
 
 for i in range(len(classification_values) - 1):
-    r = r + classification_output_values[i] * logical_and(data >= classification_values[i], data < classification_values[i + 1])
+    r[logical_and(data >= classification_values[i], data < classification_values[i + 1])] = classification_output_values[i]
 
-r = r + classification_output_values[i] * (data >= classification_values[i + 1])
+r[(data >= classification_values[i + 1])] = classification_output_values[i] 
 
 format = "GTiff"
 driver = gdal.GetDriverByName( format )
