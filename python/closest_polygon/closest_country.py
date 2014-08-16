@@ -41,7 +41,7 @@ class ClosestCountry:
 
         self.polygons = [Polygon(w) for w in self.map.world]
         self.names = [w['name'] for w in self.map.world_info]
-    def draw_map(self, num_angles = 360):
+    def draw_map(self, num_angles = 360, width_factor = 1.0):
 
         #Create the map, with no countries
         self.map = Basemap(projection='aeqd',
@@ -57,9 +57,14 @@ class ClosestCountry:
                 distances.append(dist)
                 if (self.names[closest] in results) == False:
                     results[self.names[closest]] = []
-                results[self.names[closest]].append(angle)
 
-        width = reduce(lambda x, y: x + y, distances) / len(distances)
+                results[self.names[closest]].append(angle)
+        
+        #The map zoom is calculated here, 
+        #taking the 90% of the distances to be drawn by default       
+        width = width_factor * sorted(distances)[
+                int(-1 * round(len(distances)/10.))]
+
         #Create the figure so a legend can be added
         plt.close()
         fig = plt.figure()
@@ -187,11 +192,16 @@ if __name__ == "__main__":
         type=int, default=10, metavar = 'num_angles')
     PARSER.add_argument("-o", help="Out file. If present, saves the file instead of showing it", 
         type=str, default=None, metavar = 'out_file')
+    PARSER.add_argument("-wf", 
+        help='''The width factor. Use it to zoom in and out.
+        Use > 1 to draw a bigger area, and <1 for a smaller one. By default is 1''', 
+        default=1.0, type=float,
+        metavar = 'zoom_factor')
 
     ARGS = PARSER.parse_args()
 
     INST = ClosestCountry(ARGS.lon, ARGS.lat)
-    INST.draw_map(ARGS.n)
+    INST.draw_map(ARGS.n, ARGS.wf)
     if ARGS.o is None:
         INST.show_map()
     else:
