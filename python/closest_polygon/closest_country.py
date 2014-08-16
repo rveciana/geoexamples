@@ -25,10 +25,7 @@ class ClosestCountry:
 
         self.center_lon = center_lon
         self.center_lat = center_lat
-        
-               
-        
-        
+                     
     def read_shape(self):
         #Read the countries shapefile
         self.map.readshapefile(
@@ -75,8 +72,6 @@ class ClosestCountry:
         self.map = Basemap(projection='aeqd', width=width, height=width,
                     lat_0=self.center_lat,lon_0=self.center_lon,resolution =None)
         self.read_shape()
-        #m = Basemap(projection='aeqd', width=5000000, height=5000000,  lat_0=0,lon_0=70,resolution ='l')
-        
         
         #Fill background.
         self.map.drawmapboundary(fill_color='aqua')
@@ -114,7 +109,6 @@ class ClosestCountry:
         colorbar.ax.set_yticklabels(results.keys())
 
         plt.title('Closest country')
-
 
     def closest_polygon(self, angle, dist = 280000000):
   
@@ -160,6 +154,8 @@ class ClosestCountry:
 
             cmap: colormap instance, eg. cm.jet. 
             N: number of colors.
+        I've taken it from 
+        http://wiki.scipy.org/Cookbook/Matplotlib/ColormapTransformations
 
         Example
             x = resize(arange(100), (5,100))
