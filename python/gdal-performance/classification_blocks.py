@@ -37,7 +37,7 @@ for i in range(0, ysize, y_block_size):
         if j + x_block_size < xsize:
             cols = x_block_size
         else:
-            cols = xsize
+            cols = xsize - j
 
         data = band.ReadAsArray(j, i, cols, rows)
         r = zeros((rows, cols), numpy.float)
