@@ -50,7 +50,7 @@ for i in range(0, ysize, y_block_size):
             if classification_values[k] < max_value and (classification_values[k + 1] > min_value ):
                 r = r + classification_output_values[k] * logical_and(data >= classification_values[k], data < classification_values[k + 1])
         if classification_values[k + 1] < max_value:
-            r = r + classification_output_values[k] * (data >= classification_values[k + 1])
+            r = r + classification_output_values[k+1] * (data >= classification_values[k + 1])
 
         dst_ds.GetRasterBand(1).WriteArray(r,j,i)
 
