@@ -47,7 +47,7 @@ for i in range(0, ysize, y_block_size):
         r = zeros((rows, cols), numpy.uint8)
 
         for k in range(len(classification_values) - 1):
-            if classification_values[k] < max_value and (classification_values[k + 1] > min_value ):
+            if classification_values[k] <= max_value and (classification_values[k + 1] > min_value ):
                 r = r + classification_output_values[k] * logical_and(data >= classification_values[k], data < classification_values[k + 1])
         if classification_values[k + 1] < max_value:
             r = r + classification_output_values[k+1] * (data >= classification_values[k + 1])
