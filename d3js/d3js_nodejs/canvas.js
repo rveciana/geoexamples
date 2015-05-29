@@ -21,7 +21,7 @@ var path = d3.geo.path()
 
 
 var data = JSON.parse(fs.readFileSync(__dirname +"/world-50m.json", 'utf8'));
-var land = topojson.feature(data, data.objects['land']);
+var land = topojson.feature(data, data.objects.land);
 
   context.strokeStyle = '#888';
   context.fillStyle = '#aaa';

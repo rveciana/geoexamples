@@ -1,13 +1,10 @@
-var jsdom = require('jsdom'); // Must be 3.x version, not 4.x, which doesn't work on nodejs npm install jsdom@3
+var jsdom = require('jsdom');
 var fs = require('fs');
-var d3 = require('d3');
 var topojson = require('topojson');
 
 
-//http://www.ciiycode.com/0HNJNUPePjXq/jsdomenv-local-jquery-script-doesnt-work
 jsdom.env({
         html: "<html><body></body></html>",
-        //documentRoot: __dirname , doesn't seem to work
         scripts: [
           __dirname + '/node_modules/d3/d3.min.js'
         ],
@@ -20,8 +17,8 @@ jsdom.env({
     height = 500;
 
 
-    var projection = d3.geo.mercator();
-    var path = d3.geo.path()
+    var projection = window.d3.geo.mercator();
+    var path = window.d3.geo.path()
       .projection(projection);
 
     var svg = window.d3.select("body").append("svg")
