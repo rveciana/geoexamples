@@ -1,6 +1,3 @@
-//cairo!!
-//https://github.com/Automattic/node-canvas -> https://github.com/Automattic/node-canvas/wiki/_pages
-// sudo apt-get install libcairo2-dev libjpeg8-dev libpango1.0-dev libgif-dev build-essential g++
 var fs = require('fs');
 var Canvas = require('canvas');
 var d3 = require('d3');
