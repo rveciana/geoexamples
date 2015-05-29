@@ -23,7 +23,8 @@ jsdom.env({
 
     var svg = window.d3.select("body").append("svg")
         .attr("width", width)
-        .attr("height", height);
+        .attr("height", height)
+        .attr("xmlns", "http://www.w3.org/2000/svg");
 
     var data = JSON.parse(fs.readFileSync(__dirname +"/world-50m.json", 'utf8'));
 
