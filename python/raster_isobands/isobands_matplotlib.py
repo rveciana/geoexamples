@@ -24,7 +24,7 @@ import matplotlib.pyplot as plt
 
 
 def isobands(in_file, band, out_file, out_format, layer_name, attr_name, 
-    offset, interval, min_level = None):
+    offset, interval, fixed_levels, min_level = None):
     '''
     The method that calculates the isobands
     '''
@@ -61,17 +61,18 @@ def isobands(in_file, band, out_file, out_format, layer_name, attr_name,
 
     raster_values = band_in.ReadAsArray(0, 0, xsize_in, ysize_in)
 
-    stats = band_in.GetStatistics(False, True)
-    if min_level == None:
-        min_value = stats[0]
-        min_level = offset + interval * floor((min_value - offset)/interval)
-   
-    max_value = stats[1]
-    #Due to range issues, a level is added
-    max_level = offset + interval * (1 + ceil((max_value - offset)/interval)) 
-
-    levels = arange(min_level, max_level, interval)
-
+    if fixed_levels != None:
+        levels = fixed_levels
+    else:
+        stats = band_in.GetStatistics(False, True)
+        if min_level == None:
+            min_value = stats[0]
+            min_level = offset + interval * floor((min_value - offset)/interval)
+       
+        max_value = stats[1]
+        #Due to range issues, a level is added
+        max_level = offset + interval * (1 + ceil((max_value - offset)/interval)) 
+        levels = arange(min_level, max_level, interval)
     contours = plt.contourf(x_grid, y_grid, raster_values, levels)
 
     
@@ -123,6 +124,9 @@ if __name__ == "__main__":
     PARSER.add_argument("-i", 
         help="The interval  (default 0)", 
         type=float, default = 0.0, metavar = 'interval')
+    PARSER.add_argument("-fl", 
+        help="name one or more 'fixed levels' to extract (default 0)", 
+        type=float, nargs="+", metavar = 'fixed levels')
     PARSER.add_argument("-nln", 
         help="The out layer name  (default bands)", 
         default = 'bands', metavar = 'layer_name')
@@ -135,4 +139,4 @@ if __name__ == "__main__":
     ARGS = PARSER.parse_args()
 
     isobands(ARGS.src_file, ARGS.b, ARGS.out_file, ARGS.f, ARGS.nln, ARGS.a, 
-        ARGS.off, ARGS.i)
+        ARGS.off, ARGS.i, ARGS.fl)
