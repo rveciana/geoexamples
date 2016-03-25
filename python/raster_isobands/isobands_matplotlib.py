@@ -16,6 +16,9 @@ from math import ceil
 from os.path import exists
 from os import remove
 from argparse import ArgumentParser
+
+import matplotlib
+matplotlib.use('Agg') #workaround to make it run on systems without Xwindows
 import matplotlib.pyplot as plt
 
 
