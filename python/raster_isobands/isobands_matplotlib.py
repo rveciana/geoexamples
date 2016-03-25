@@ -125,7 +125,7 @@ if __name__ == "__main__":
         help="The interval  (default 0)", 
         type=float, default = 0.0, metavar = 'interval')
     PARSER.add_argument("-fl", 
-        help="name one or more 'fixed levels' to extract (default 0)", 
+        help="List of fixed levels (float)", 
         type=float, nargs="+", metavar = 'fixed levels')
     PARSER.add_argument("-nln", 
         help="The out layer name  (default bands)", 
