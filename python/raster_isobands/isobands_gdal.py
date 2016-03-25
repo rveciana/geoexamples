@@ -26,7 +26,7 @@ def isobands(in_file, band, out_file, out_format, layer_name, attr_name,
     xsize_in = band_in.XSize
     ysize_in = band_in.YSize
 
-    stats = band_in.GetStatistics(True, True)
+    stats = band_in.GetStatistics(False, True)
     
     if min_level == None:
         min_value = stats[0]
