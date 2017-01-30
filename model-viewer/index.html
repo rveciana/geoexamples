@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+<meta charset="utf-8">
+<head>
+<style>
+#tooltip {
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: 10;
+  margin: 0;
+  padding: 10px;
+  width: 180px;
+  height: 50px;
+  color: white;
+  font-family: sans-serif;
+  font-size: 0.9em;
+  font-weight: bold;
+  text-align: center;
+  background-color: rgba(0, 0, 0, 0.55);
+  opacity: 0;
+  pointer-events: none;
+  border-radius:5px;
+  transition: .2s;
+}
+</style>
+<script src="https://d3js.org/d3.v4.min.js"></script>
+<script src="geotiff.min.js"></script>
+<script src="d3-marching-squares.min.js"></script>
+<script src="raster-streamlines.js"></script>
+<script src="path-properties.min.js"></script>
+<script src="http://d3js.org/topojson.v1.min.js"></script>
+<script src="https://d3js.org/d3-scale-chromatic.v1.min.js"></script>
+<link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.0.2/css/bootstrap.min.css"> <!-- load bootstrap css -->
+<link rel="stylesheet" href="//netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.min.css"> <!-- load fontawesome -->
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+<script src="bootstrap-datepicker.js"></script>
+<link rel="stylesheet" href="datepicker.css">
+<head>
+<body>
+<div id="tooltip"></div>
+
+<nav class="navbar navbar-default">
+  <div class="container-fluid">
+    <!-- Brand and toggle get grouped for better mobile display -->
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
+        <span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" href="#">Home</a>
+    </div>
+
+    <!-- Collect the nav links, forms, and other content for toggling -->
+    <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+      <ul class="nav navbar-nav">
+        <li class="dropdown">
+          <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Model <span class="caret"></span></a>
+          <ul class="dropdown-menu">
+            <li><a href="#">GFS</a></li>
+            <li><a href="#">ECMWF</a></li>
+            <li><a href="#">WRF</a></li>
+            <li><a href="#">...</a></li>
+          </ul>
+        </li>
+        <li class="dropdown">
+          <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Variable <span class="caret"></span></a>
+          <ul class="dropdown-menu">
+            <li><a href="#">Temperature</a></li>
+            <li><a href="#">Relative Humidity</a></li>
+            <li><a href="#">Wind</a></li>
+            <li><a href="#">Precipitation</a></li>
+            <li><a href="#">Cloud cover</a></li>
+            <li><a href="#">...</a></li>
+          </ul>
+        </li>
+        <li class="dropdown">
+          <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Level <span class="caret"></span></a>
+          <ul class="dropdown-menu">
+            <li><a href="#">SFC</a></li>
+            <li><a href="#">850 hPa</a></li>
+            <li><a href="#">700 hPa</a></li>
+            <li><a href="#">500 hPa</a></li>
+            <li><a href="#">...</a></li>
+          </ul>
+        </li>
+        <li class="dropdown">
+          <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Zone <span class="caret"></span></a>
+          <ul class="dropdown-menu">
+            <li><a href="#">East Coast</a></li>
+            <li><a href="#">West Coast</a></li>
+            <li><a href="#">Canada</a></li>
+            <li><a href="#">Europe</a></li>
+            <li><a href="#">...</a></li>
+          </ul>
+        </li>
+      </ul>
+      <div class="navbar-form navbar-left">
+        <img src="rwd.svg" height="30px"/>
+        <img src="play.svg" height="30px"/>
+        <img src="fwd.svg" height="30px"/>
+      </div>
+      <div type="text" class="navbar-form navbar-left" >
+        <div class="input-append date datepicker" id="dp3" data-date="12-02-2016" data-date-format="dd-mm-yyyy">
+
+          <input class="span2" size="16" type="text" value="12-02-2016">
+          <i class="glyphicon glyphicon-calendar"></i>
+          <span class="add-on"><i class="icon-th"></i></span>
+
+        </div>
+
+     </div>
+
+
+
+    </div><!-- /.navbar-collapse -->
+  </div><!-- /.container-fluid -->
+</nav>
+
+<div id="map"></div>
+
+<script>
+$('.datepicker').datepicker()
+var width = 680,
+    height = 500,
+    barbSize = 40;
+
+var projection = d3.geoConicConformal()
+    .rotate([82, 0])
+    .center([0, 34.83158])
+    .parallels([30, 60])
+    .scale(2300)
+    .translate([width / 2, height / 2]);
+
+var canvas = d3.select("#map").append("canvas")
+    .attr("width", width)
+    .attr("height", height);
+
+var context = canvas.node().getContext("2d");
+d3.request("wrf.tiff")
+  .responseType('arraybuffer')
+  .get(function(error, tiffData){
+d3.json("world-110m.json", function(error, topojsonData) {
+  var countries = topojson.feature(topojsonData, topojsonData.objects.countries);
+  var path = d3.geoPath()
+      .projection(projection).context(context);
+  var path2 = d3.geoPath()
+      .projection(projection);
+
+  context.beginPath();
+  context.strokeStyle = "#777";
+  context.fillStyle = "#aaa";
+  path(countries);
+  context.fill();
+  context.stroke();
+
+  var tiff = GeoTIFF.parse(tiffData.response);
+  var image = tiff.getImage();
+  var rasters = image.readRasters();
+  var tiepoint = image.getTiePoints()[0];
+  var pixelScale = image.getFileDirectory().ModelPixelScale;
+  var geoTransform = [tiepoint.x, pixelScale[0], 0, tiepoint.y, 0, -1*pixelScale[1]];
+
+  var uData = new Array(image.getHeight());
+  var vData = new Array(image.getHeight());
+  var spdData = new Array(image.getHeight());
+  for (var j = 0; j<image.getHeight(); j++){
+      uData[j] = new Array(image.getWidth());
+      vData[j] = new Array(image.getWidth());
+      spdData[j] = new Array(image.getWidth());
+      for (var i = 0; i<image.getWidth(); i++){
+          uData[j][i] = rasters[0][i + j*image.getWidth()];
+          vData[j][i] = rasters[1][i + j*image.getWidth()];
+          spdData[j][i] = 1.943844492 * Math.sqrt(uData[j][i]*uData[j][i] + vData[j][i]*vData[j][i]);
+      }
+  }
+
+  var intervalsSpd = [0, 5, 10, 15, 20, 25, 30, 35, 40];
+  var bandsSpd = rastertools.isobands(spdData, geoTransform, intervalsSpd);
+  var colorScale = d3.scaleSequential(d3.interpolateBuPu);
+  bandsSpd.features.forEach(function(d, i) {
+    context.beginPath();
+    context.globalAlpha = 0.7;
+    context.fillStyle = colorScale(intervalsSpd[i]/40);
+    path(d);
+    context.fill();
+   });
+
+
+  var lines = rs.streamlines(uData,vData, geoTransform);
+  lines.features.forEach(function(d) {
+    var properties = spp.svgPathProperties(path2(d));
+    var arrowPos = properties.getPropertiesAtLength(properties.getTotalLength()/2);
+    var arrowDegrees = Math.atan(arrowPos.tangentY/arrowPos.tangentX);
+    context.beginPath();
+    context.strokeStyle = "#000000";
+    path(d);
+    context.stroke();
+    context.beginPath();
+    context.moveTo(arrowPos.x, arrowPos.y);
+    context.lineTo(arrowPos.x-10*arrowPos.tangentX + 6*arrowPos.tangentY,arrowPos.y-10*arrowPos.tangentY - 6*arrowPos.tangentX);
+    context.moveTo(arrowPos.x, arrowPos.y);
+    context.lineTo(arrowPos.x-10*arrowPos.tangentX - 6*arrowPos.tangentY,arrowPos.y-10*arrowPos.tangentY + 6*arrowPos.tangentX);
+    context.stroke();
+
+  });
+
+  canvas.on("click", function() {
+    var screenCoords = d3.mouse(this);
+    var coords = projection.invert(screenCoords);
+    var xTiff = (coords[0] - geoTransform[0])/geoTransform[1];
+    var yTiff = (coords[1] - geoTransform[3])/geoTransform[5];
+    var uValue = uData[Math.round(yTiff)][Math.round(xTiff)];
+    var vValue = vData[Math.round(yTiff)][Math.round(xTiff)];
+    var spd = Math.sqrt(uValue*uValue + vValue*vValue);
+    var dir = 270 + (Math.atan2(-vValue,uValue)*180/Math.PI);
+    if(dir<0){dir = dir + 360;}
+
+    d3.select("#tooltip")
+        .style("left", screenCoords[0] + "px")
+        .style("top", screenCoords[1] + "px")
+        .style("opacity", 1)
+        .html("Wind speed: " + spd.toFixed(1) + " m/s <br/>Wind dir: " + dir.toFixed(0) +"º");
+
+  });
+});
+});
+</script>
+
+</body>
