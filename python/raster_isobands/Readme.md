@@ -10,6 +10,7 @@ There are two scripts, that are used exacly the same and produce the same result
 
 ```
     Usage: isobands_matplotlib.py [-h] [-b band] [-off offset] [-i interval]
+    [-fl fixed levels [fixed levels ...]]
     [-nln layer_name] [-a attr_name] [-f formatname]
     src_file out_file
     Calculates the isobands from a raster into a vector file
@@ -22,6 +23,8 @@ There are two scripts, that are used exacly the same and produce the same result
       -b band          The band in the source file to process (default 1)
       -off offset      The offset to start the isobands (default 0)
       -i interval      The interval (default 0)
+      -fl fixed levels [fixed levels ...]
+                       List of fixed levels (float)
       -nln layer_name  The out layer name (default bands)
       -a attr_name     The out layer attribute name (default h)
       -f formatname    The output file format name (default ESRI Shapefile)
