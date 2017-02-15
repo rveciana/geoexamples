@@ -1,3 +1,4 @@
+#!/usr/bin/env python
 '''
 isobands_matplotlib.py is a script for creating isobands.
 Works in a similar way as gdal_contour, but creating polygons
